@@ -4,7 +4,7 @@
 /*** Abort:
  * Aborts the program.
  * ---------------------------------------------------------------------------*/
-__attribute__((__noreturn))
+__attribute__((noreturn))
 void abort();
 
 #endif

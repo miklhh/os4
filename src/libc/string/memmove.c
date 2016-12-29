@@ -13,10 +13,10 @@ void* memmove(void* destination, const void* source, size_t bytes)
 	}
 	else
 	{
-		for (size_t i = size; i != 0; i--)
+		for (size_t i = bytes; i != 0; i--)
 		{
 			dst[i-1] = src[i-1];
 		}
 	}
-	return dstptr;
+	return destination;
 }

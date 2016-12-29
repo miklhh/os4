@@ -12,14 +12,14 @@
  * Function that prints a formated string to the stdout. Returns the amount of
  * characters written.
  * ---------------------------------------------------------------------------*/
-int printf(const char* __restrict string, ...);
+int printf(const char* restrict format, ...);
 
 
 /*** Put character (int):
  * Function for writing a character (as an integer) to the stdout. Returns the
  * integer written on succes, or EOF (-1) if it fails.
  * ---------------------------------------------------------------------------*/
-int putchar(int char);
+int putchar(int character);
 
 
 /*** Put character (char):
