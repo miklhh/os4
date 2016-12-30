@@ -27,8 +27,13 @@ kernel_stack_top:
 section .text
 global _start:function (_start.end - _start)
 _start:
-	; Setup the stack and call the kernel
+
+	; Setup the stack, call the global constructor and call the kernel
 	mov esp, kernel_stack_top
+
+	extern _init
+	call _init
+
 	extern kernel_main
 	call kernel_main
 

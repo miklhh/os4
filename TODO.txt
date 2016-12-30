@@ -1,0 +1,3 @@
+1. Add clean to the makefiles.
+2. Add scrolling to the tty.
+3. Startt looking into some time programming.

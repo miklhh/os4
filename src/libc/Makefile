@@ -1,3 +1,14 @@
+##
+# NOTE TO SELF:
+# I was a newb and could not figure out how to make everything with a make all
+# recipie, since libk requires some wildcard files that only could exist when
+# objfiles have been build. So the 'all' recipie has been removed (as i said it
+# did not function properly). Instead, please (IN THIS ORDER):
+#   1. 'make headers'
+#   2. 'make objfiles'
+#   3. 'make libk'
+##
+
 #Compiler stuff:
 include ../make.config
 GCC = $(CROSSCOMPILER)
@@ -10,17 +21,16 @@ OBJOUTPATH = ../../build/objfiles
 BUILDPATH = ../../build
 
 #Files:
-LIBKOBJFILES := $(wildcard $(OBJOUTPATH)/*.libk.o)
 SOURCEFILES := $(wildcard stdlib/*.c) $(wildcard stdio/*.c) $(wildcard string/*.c)
+LIBKOBJFILES := $(wildcard $(OBJOUTPATH)/*.libk.o)
 
 #Definitions:
 DEFS = -D__is_libc -D__is_libk
 
-GCCBUILDOBJ := $(GCC) --sysroot=$(SYSROOT) $(CFLAGS) -Iinclude
+GCCBUILDOBJ := $(GCC) --sysroot=$(SYSROOT) $(CFLAGS) \
+	          -Iinclude -D__is_libk -isystem=/usr/include
 
 #Makes:
-all: objfiles libk headers
-
 clean:
 	-rm $(OBJOUTPATH)/*.libk.o
 	-rm -rf $(SYSROOT)/usr
@@ -37,9 +47,11 @@ objfiles: $(SOURCEFILES)
 	$(GCCBUILDOBJ) -o $(OBJOUTPATH)/memcpy.libk.o 	-c string/memcpy.c
 	
 	
-libk: $(LIBKOBJFILES)
+
+libk: $(OBJOUTPATH)/abort.libk.o
 	mkdir -p $(SYSROOT)/usr/lib
 	$(AR) rcs $(SYSROOT)/usr/lib/libk.a $(LIBKOBJFILES)
 
 headers:
-	cp -r include/ $(SYSROOT)/usr/include
+	mkdir -p $(SYSROOT)/usr/include
+	cp -r include/ $(SYSROOT)/usr
