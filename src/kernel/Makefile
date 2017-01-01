@@ -35,13 +35,13 @@ CRTN_OBJ := $(OBJOUTPATH)/crtn.kernel.o
 
 OBJ_LINK_LIST := $(CRTI_OBJ) $(CRTBEGIN_OBJ) $(LINKFILES) -nostdlib \
 		    -lk -lgcc $(CRTEND_OBJ) $(CRTN_OBJ)
-INTERNAL_OBJ := $(CRTI_OBJ) $(OBJS) $(CRTN_OBJ)
+INTERNAL_OBJ := $(CRTI_OBJ) $(LINKFILES) $(CRTN_OBJ)
 
 headers:
 	mkdir -p $(SYSROOT)/usr/include
 	cp -r include/ $(SYSROOT)/usr/
 
-kernelobj:
+objfiles:
 	$(COMPILER) 	-o $(OBJOUTPATH)/kernel.kernel.o 	-MD -c kernel/kernel.c
 	$(COMPILER) 	-o $(OBJOUTPATH)/tty.kernel.o 		-MD -c arch/i386/tty.c
 	$(ASSEMBLER) 	-o $(OBJOUTPATH)/boot.kernel.o		       arch/i386/boot.asm
@@ -49,6 +49,9 @@ kernelobj:
 	$(ASSEMBLER) 	-o $(OBJOUTPATH)/crti.kernel.o		       arch/i386/crti.asm	
 
 
-os.bin: kernelobj $(CRTBEGIN_OBJ) $(CRTEND_OBJ)
+kernel: $(LINKFILES) $(CRTBEGIN_OBJ) $(CRTEND_OBJ)
 	$(LINKER)	-o $(BUILDPATH)/os.bin $(OBJ_LINK_LIST)
 
+clean:
+	-rm -r $(INTERNAL_OBJ)
+	-rm -r $(SYSROOT)/usr
