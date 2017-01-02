@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <kernel/tty.h>
+#include <tty/tty.h>
 
 void kernel_main(void)
 {

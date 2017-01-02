@@ -1,5 +1,6 @@
 Requirements:
 - i686-elf-gcc and linker, in path ~/opt/cross/ (cross-compiler)
+  (acctually an entire iX86-elf compiler collection)
 - GRUB (sudo apt-get install grub-common; from package manager)
 - xorriso (sudo apt-get install xorriso; from package manager)
 - nasm

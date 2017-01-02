@@ -1,3 +1,6 @@
-1. Add clean to the makefiles.
-2. Add scrolling to the tty.
-3. Startt looking into some time programming.
+1. 	- Start looking into some time programming.
+	- Comment tty.h
+
+REMEMBER:
+The -MD flag has been removed from comilation in hope of not creating those
+annoying .d files. Does it still work?
