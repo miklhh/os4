@@ -1,31 +1,27 @@
-/* ********************************************** *
- * Functions for using the processor input output 
- * ********************************************** */
+#ifndef _IO_H
+#define _IO_H
 
-/* 8-bit (a byte) port in function. */
-static inline uint8_t inb (uint16_t port)
-{
-	uint8_t value;
-	asm volatile ("inb %1, %0" : "=a"(value) : "Nd"(port));
-	return value;
-} 
+/* ****************************************** *
+ * Functions for using the processor BUS I/O. * 
+ * ****************************************** */
 
-/* 8-bit (a byte) port out function. */
-static inline void outb (uint8_t value, uint16_t port)
-{
-	asm volatile ("outb %0, %1" :: "a"(value), "Nd"(port));
-}
+/*
+ * Note: This file is implemented in the arch directory.
+ */
 
-/* 16-bit (a word) port in function. */
-static inline uint8_t inw (uint16_t port)
-{
-	uint16_t value;
-	asm volatile ("inw %1, %0" : "=a"(value) : "Nd"(port));
-	return value;
-}
+/* TODO:
+ * Implement the in and out for double word!
+ */
+#include <stdint.h>
 
-/* 16-bit (a word) port out function. */
-static inline void outw (uint16_t value, uint16_t port)
-{
-	asm volatile ("outw %0, %1" :: "a"(value), "Nd"(port));
-}
+/* In functions */
+uint8_t   inb (uint16_t port);
+uint16_t  inw (uint16_t port);
+uint32_t  ind (uint32_t port);
+
+/* Out functions */
+void      outb (uint8_t value, uint16_t port);
+void      outw (uint16_t value, uint16_t port);
+void      outd (uint32_t value, uint32_t port);
+
+#endif

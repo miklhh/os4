@@ -2,6 +2,7 @@
 include make.config
 GCC = $(CROSSCOMPILER)
 SUBDIR = kernel libc drivers
+
 ###PATHS:
 BUILD = ../build
 SYSROOT = $(BUILD)/sysroot
@@ -9,17 +10,18 @@ OBJOUTPATH = $(BUILD)/objfiles
 
 ###Files:
 #Linkfiles, excluding crti.o, crtn.o, crtbegin.o and crtend.o
-LINKFILES := $(wildcard $(OBJOUTPATH)/*.kernel.o) \
-	     $(wildcard $(OBJOUTPATH)/*.driver.o) 
+LINKFILES = $(wildcard $(OBJOUTPATH)/*.kernel.o) \
+	    $(wildcard $(OBJOUTPATH)/*.driver.o) \
+	    $(wildcard $(OBJOUTPATH)/*.arch.o)
 
 #CRT-linkfiles:
-CRTI_OBJ := $(OBJOUTPATH)/crti.crtx.o
-CRTBEGIN_OBJ := $(shell $(GCC) $(CFLAGS) -print-file-name=crtbegin.o)
-CRTEND_OBJ := $(shell $(GCC) $(CFLAGS) -print-file-name=crtend.o)
-CRTN_OBJ := $(OBJOUTPATH)/crtn.crtx.o
+CRTI_OBJ = $(OBJOUTPATH)/crti.crtx.o
+CRTBEGIN_OBJ = $(shell $(GCC) $(CFLAGS) -print-file-name=crtbegin.o)
+CRTEND_OBJ = $(shell $(GCC) $(CFLAGS) -print-file-name=crtend.o)
+CRTN_OBJ = $(OBJOUTPATH)/crtn.crtx.o
 
 #Link-list (please note the links inside of the crt-objects):
-OBJ_LINK_ORDER := $(CRTI_OBJ) $(CRTBEGIN_OBJ) $(LINKFILES) -nostdlib \
+OBJ_LINK_ORDER = $(CRTI_OBJ) $(CRTBEGIN_OBJ) $(LINKFILES) -nostdlib \
 		    -lk -lgcc $(CRTEND_OBJ) $(CRTN_OBJ)
 
 ###Build-options:
@@ -32,11 +34,13 @@ headers:
 	cd libc && $(MAKE) headers
 	cd drivers && $(MAKE) headers
 	cd kernel && $(MAKE) headers 
+	cd arch && $(MAKE) headers
 
 objfiles:
 	cd libc && $(MAKE) objfiles
 	cd drivers && $(MAKE) objfiles
 	cd kernel && $(MAKE) objfiles
+	cd arch && $(MAKE) objfiles
 
 libs:
 	cd libc && $(MAKE) libk
@@ -53,4 +57,6 @@ clean:
 	-rm $(BUILD)/os.bin
 	-rm $(BUILD)/os.iso
 
-all: headers objfiles libs os
+# MAKE ALL WILL BE COMENTED OUT UNTIL A FIX FOR THE REASIGMENT OF VARIABLE
+# HAS BEEN THOUGHT OF.
+# all: headers objfiles libs os 

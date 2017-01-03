@@ -19,7 +19,7 @@ align 4
 section .bss
 align 16			; Align 4 tested, did not work.
 kernel_stack_bottom:
-resb 16384
+resb 32768
 kernel_stack_top:
 
 
