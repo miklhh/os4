@@ -31,6 +31,7 @@ LINKER = $(GCC) $(LINKERFLAGS) --sysroot=$(SYSROOT) -isystem=/usr/include \
 	 -Tlinker.ld
 
 headers:
+	@echo "Making Headers"
 	cd libc && $(MAKE) headers
 	cd drivers && $(MAKE) headers
 	cd kernel && $(MAKE) headers 

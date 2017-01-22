@@ -1,11 +1,10 @@
 (!0!).	- Include guards on everything. How can this have been forgoton...
 
-1. 	- Start looking into some time programming.
+1. 	- Complete the GDT.
+	- Start looking into some time programming.
 	- Comment tty.h
 	- Can't make all yet. The wildcard does not agnolage the objfiles, 
 	  since the objfiles does not exist on variable load.
-	- Don't static inline functions in the kernel/io.h file. Compile them
-	  instead and link them during the compile.
 
 REMEMBER:
 The -MD flag has been removed from comilation in hope of not creating those
