@@ -9,7 +9,18 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
+#include <stdint.h>
 
+/* An Ascii-Hexabet */
+static char hexabet[16] = {'0', '1', '2', '3',
+			   '4', '5', '6', '7',
+			   '8', '9', 'A', 'B',
+			   'C', 'D', 'E', 'F'};
+
+/* Variable array for hexconverter */
+static char hexstring[11] = "0x00000000\0";
+
+/* Print function. */
 static bool print(const char* data, size_t length) 
 {
 	const unsigned char* bytes = (const unsigned char*) data;
@@ -17,6 +28,27 @@ static bool print(const char* data, size_t length)
 		if (putchar(bytes[i]) == EOF)
 			return false;
 	return true;
+}
+
+char* hexconverter (uint32_t num)
+{
+	memcpy(hexstring, (char[11]){ '0', 'x', '0', '0', '0',
+				      '0', '0', '0', '0', '0',
+				      '\0'}, 11);
+	
+	for (uint8_t i = 9; i > 1; i--)
+	{
+		/* For each iteration, bitshift the number accordingly. */
+		uint32_t temp = 0;
+		temp = num >> (4 * (9 - i));
+
+		/* Mask the the first four bits of the temp variable */
+		temp &= 0xf;
+		hexstring[i] = hexabet[temp];
+	}
+
+	/* Return the string. */
+	return hexstring;
 }
 
 int printf(const char* restrict format, ...) {
@@ -47,7 +79,9 @@ int printf(const char* restrict format, ...) {
 
 		const char* format_begun_at = format++;
 
-		if (*format == 'c') {
+		/* Handle '%c, a character being passed in the argument list. */
+		if (*format == 'c') 
+		{
 			format++;
 			char c = (char) va_arg(parameters, int /* char promotes to int */);
 			if (!maxrem) {
@@ -57,7 +91,12 @@ int printf(const char* restrict format, ...) {
 			if (!print(&c, sizeof(c)))
 				return -1;
 			written++;
-		} else if (*format == 's') {
+
+		}
+		 
+		/* Handle '%s', a string being passed in the argument list */
+		else if (*format == 's') 
+		{
 			format++;
 			const char* str = va_arg(parameters, const char*);
 			size_t len = strlen(str);
@@ -68,7 +107,27 @@ int printf(const char* restrict format, ...) {
 			if (!print(str, len))
 				return -1;
 			written += len;
-		} else {
+		}
+		
+		/* Handle '%h', an unsinged integer being passed in the
+		 * argument list. */
+		else if (*format == 'h')
+		{
+			format++;
+			uint32_t num = va_arg(parameters, uint32_t);
+
+			char* string = hexconverter(num);
+			if (!maxrem)
+			{
+				// TODO: Set errno to EOVERFLOW.
+				return -1;
+			}
+			if (!printf(string))
+				return -1;
+			written++;
+		}
+	
+		else  {
 			format = format_begun_at;
 			size_t len = strlen(format);
 			if (maxrem < len) {

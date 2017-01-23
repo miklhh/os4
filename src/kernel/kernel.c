@@ -9,4 +9,8 @@ void kernel_main(void)
 
 	//Initialize the paging.
 	paging_init();
+
+	//Test:
+	printf("Testing \n");
+	printf("1 %h 3", 0x123abc);
 }
