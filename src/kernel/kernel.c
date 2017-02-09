@@ -12,5 +12,6 @@ void kernel_main(void)
 
 	//Test:
 	printf("Testing \n");
-	printf("1 %h 3", 0x123abc);
+	printf("%h", 0x123abc);
+	printf(" %h %h %h %h", 12345678, 0x123abcff, 0, 0xffffffff); 
 }

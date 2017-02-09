@@ -1,5 +1,5 @@
 /*
- * Heavaly influenced by 'levex' OSDEV source code.
+ * This file 'paging.c' is heavaly influenced by 'levex' OSDEV source code.
  * LINK: "https://github.com/levex/osdev/"  
  */
 #include <stdint.h>
@@ -32,11 +32,12 @@ void paging_map_virtual_to_phys(uint32_t virt, uint32_t phys)
 	}
 	page_directory[id] = ((uint32_t) last_page) | 3;
 	last_page = (uint32_t*) (((uint32_t) last_page) + 4096);
+	printf("Mapping %h to %h.\n", virt, phys);
 }
 
 void paging_init()
 {
-	printf("Setting up paging.\n");
+	printf("------| Setting up paging. |-----\n");
 	page_directory = (uint32_t*)0x400000;
 	last_page = (uint32_t*) 0x404000;
 	
@@ -48,5 +49,5 @@ void paging_init()
 	paging_map_virtual_to_phys(0, 0);
 	paging_map_virtual_to_phys(0x400000, 0x400000);
 	paging_enable();
-	printf("Paging initialized.\n");
+	printf("------| Paging initialized.|-----\n");
 }

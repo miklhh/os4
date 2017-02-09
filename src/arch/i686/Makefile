@@ -29,6 +29,7 @@ objfiles: $(SOURCES)
 	#Comment: The prefix *.crtx.o is used so that the linkers wildcard
 	#	  will not link the file crtx files twice.
 	$(COMPILE) 	-o $(OBJOUTPATH)/io.arch.o	-c io.c
+	$(COMPULE)	-o $(OBJOUTPATH)/gdt.arch.o	-c gdt.c
 	cd memory && make objfiles
 
 clean:
