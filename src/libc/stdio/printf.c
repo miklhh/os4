@@ -114,7 +114,7 @@ int printf(const char* restrict format, ...)
 		}
 		
 		/* Handle '%h', an unsinged integer being passed in the
-		 * argument list. */
+		 * argument list. Printing argument in hex. */
 		else if (*format == 'h')
 		{
 			format++;
@@ -129,6 +129,36 @@ int printf(const char* restrict format, ...)
 			if (!printf(string))
 				return -1;
 			written++;
+		}
+
+		else if (*format == 'u')
+		{
+			format++;
+			uint32_t num = va_arg(parameters, uint32_t);
+
+			/* Test if the number is zero */
+			if (num == 0)
+			{
+				putchar('0');
+			}
+
+			/* Otherwise, use simple algorithm to print the number */
+			uint8_t index = 0;
+			uint32_t stack[10];	// Uint32 cannot be bigger than 4 billion.
+			while (num > 0)
+			{
+				/* Divide by ten, store the remainder onto a stack. */
+				uint32_t remainder;
+				remainder = num % 10;
+				num = num / 10;
+				stack[index] = remainder;
+				index++;
+			}
+			
+			for (size_t i = 0; i < index; i++)
+			{
+				putchar((char)(stack[index-(i+1)] + 48));
+			}
 		}
 	
 		else  {

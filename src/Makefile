@@ -4,9 +4,9 @@ GCC = $(CROSSCOMPILER)
 SUBDIR = kernel libc drivers
 
 ###PATHS:
-BUILD = ../build
-SYSROOT = $(BUILD)/sysroot
-OBJOUTPATH = $(BUILD)/objfiles
+BUILDPATH = ../build
+SYSROOT = $(BUILDPATH)/sysroot
+OBJOUTPATH = $(BUILDPATH)/objfiles
 
 ###Files:
 #Linkfiles, excluding crti.o, crtn.o, crtbegin.o and crtend.o
@@ -38,6 +38,7 @@ headers:
 	cd arch && $(MAKE) headers
 
 objfiles:
+	-mkdir -p $(BUILDPATH)/objfiles
 	cd libc && $(MAKE) objfiles
 	cd drivers && $(MAKE) objfiles
 	cd kernel && $(MAKE) objfiles
@@ -47,7 +48,7 @@ libs:
 	cd libc && $(MAKE) libk
 
 os: $(LINKFILES) $(CRTBEGIN_OBJ) $(CRTEND_OBJ) $(CRTI_OBJ) $(CRTN_OBJ)
-	$(LINKER)	-o $(BUILD)/os.bin 		$(OBJ_LINK_ORDER)
+	$(LINKER)	-o $(BUILDPATH)/os.bin 		$(OBJ_LINK_ORDER)
 
 iso:
 	echo "I am not ready for this yet..."
@@ -55,8 +56,8 @@ iso:
 clean:
 	-rm -rf $(SYSROOT)/usr		# Remove all the sysroot files.
 	-rm -rf $(OBJOUTPATH)/*.o	# Remove all the object files.
-	-rm $(BUILD)/os.bin
-	-rm $(BUILD)/os.iso
+	-rm $(BUILDPATH)/os.bin
+	-rm $(BUILDPATH)/os.iso
 
 # MAKE ALL WILL BE COMENTED OUT UNTIL A FIX FOR THE REASIGMENT OF VARIABLE
 # HAS BEEN THOUGHT OF.

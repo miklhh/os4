@@ -1,0 +1,5 @@
+--- Version information ---
+
+-- Alpha 1.0.2 2017-02-10
+Finally finished setting up the first easiest possible global descriptor table. Added support for 
+writing decimal numbers (on none hex form), via the printf function with the %u flag.

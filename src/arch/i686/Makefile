@@ -19,8 +19,9 @@ COMPILE = $(GCC) $(CFLAGS) -D__is_kernel -Iinclude --sysroot=$(SYSROOT) \
 
 ###Recipes:
 headers:
-	@echo "No headers here!"
 	cd memory && make headers
+	mkdir -p $(SYSROOT)/usr/include
+	cp -r include/ $(SYSROOT)/usr/
 
 objfiles: $(SOURCES)
 	$(ASSEMBLE) 	-o $(OBJOUTPATH)/boot.arch.o	   boot.asm
@@ -29,7 +30,8 @@ objfiles: $(SOURCES)
 	#Comment: The prefix *.crtx.o is used so that the linkers wildcard
 	#	  will not link the file crtx files twice.
 	$(COMPILE) 	-o $(OBJOUTPATH)/io.arch.o	-c io.c
-	$(COMPULE)	-o $(OBJOUTPATH)/gdt.arch.o	-c gdt.c
+	$(COMPILE)	-o $(OBJOUTPATH)/gdt.arch.o	-c gdt.c
+
 	cd memory && make objfiles
 
 clean:
