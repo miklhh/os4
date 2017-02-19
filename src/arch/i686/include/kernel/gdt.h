@@ -1,10 +1,10 @@
+/*
+ * Part of OS4, gdt.h
+ * Author Mikael Henriksson, miklhh
+ */
+
 #ifndef _gdt_h
 #define _gdt_h
-
-/* ------------------------------------------------
- * Header for handling the global descriptor table.
- * ------------------------------------------------ */
-
 
 
 #include <stdint.h>

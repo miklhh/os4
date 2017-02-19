@@ -1,7 +1,8 @@
 Requirements:
-- i686-elf-gcc and linker, in path ~/opt/cross/ (cross-compiler)
-  (acctually an entire iX86-elf compiler collection)
-- GRUB (sudo apt-get install grub-common; from package manager)
-- xorriso (sudo apt-get install xorriso; from package manager)
+- i686-elf-gcc and binutils, in path ~/opt/cross/ (cross-compiler)
+  (acctually an entire i386/i686-elf compiler collection)
+- GRUB - (sudo apt-get install grub-common; from package manager)
+- xorriso - (sudo apt-get install xorriso; from package manager)
 - nasm
-- (sudo apt-get install grub-pc-bin)
+- GRUB-BIOS-ROUTINES [If you get the error: "Boot failed: Could not read from CD-ROM 
+  (code 0009)" - (sudo apt-get install grub-pc-bin)

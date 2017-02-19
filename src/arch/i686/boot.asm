@@ -1,3 +1,8 @@
+;
+; Part of OS4, boot.asm
+; Author Mikael Henriksson, miklhh
+;
+
 ; --- Multiboot header ---
 ; For documentation about the multibootheader:
 ; https://www.gnu.org/software/grub/manual/multiboot/multiboot.html

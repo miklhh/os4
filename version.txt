@@ -1,5 +1,15 @@
 --- Version information ---
 
+-- Alpha 1.1.0 2017-02-19
+ - Code for interrupts added.
+ - Code for PIC added.
+ - Code for PIT added.
+With the interrupts and the PIC added, a sleep function has been added to the kernel. 
+For some reason VIRTUALBOX does not send the PIC signals at its programed frequency. 
+This will be looked in to very soon. Lots of code added to the source tree.
+
+
 -- Alpha 1.0.2 2017-02-10
-Finally finished setting up the first easiest possible global descriptor table. Added support for 
-writing decimal numbers (on none hex form), via the printf function with the %u flag.
+Finally finished setting up the first easiest possible global descriptor table. Added 
+support for writing decimal numbers (on none hex form), via the printf function with the 
+%u flag (u = unsigned).

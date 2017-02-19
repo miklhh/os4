@@ -20,19 +20,24 @@ COMPILE = $(GCC) $(CFLAGS) -D__is_kernel -Iinclude --sysroot=$(SYSROOT) \
 ###Recipes:
 headers:
 	cd memory && make headers
+	cd int_routines && make headers
 	mkdir -p $(SYSROOT)/usr/include
 	cp -r include/ $(SYSROOT)/usr/
 
 objfiles: $(SOURCES)
-	$(ASSEMBLE) 	-o $(OBJOUTPATH)/boot.arch.o	   boot.asm
-	$(ASSEMBLE) 	-o $(OBJOUTPATH)/crtn.crtx.o	   crtn.asm
-	$(ASSEMBLE) 	-o $(OBJOUTPATH)/crti.crtx.o	   crti.asm
+	$(ASSEMBLE) 	-o $(OBJOUTPATH)/boot.arch.o	   	boot.asm
+	$(ASSEMBLE) 	-o $(OBJOUTPATH)/crtn.crtx.o	   	crtn.asm
+	$(ASSEMBLE) 	-o $(OBJOUTPATH)/crti.crtx.o	   	crti.asm
 	#Comment: The prefix *.crtx.o is used so that the linkers wildcard
 	#	  will not link the file crtx files twice.
-	$(COMPILE) 	-o $(OBJOUTPATH)/io.arch.o	-c io.c
-	$(COMPILE)	-o $(OBJOUTPATH)/gdt.arch.o	-c gdt.c
+	$(COMPILE) 	-o $(OBJOUTPATH)/io.arch.o		-c io.c
+	$(COMPILE)	-o $(OBJOUTPATH)/gdt.arch.o		-c gdt.c
+	$(COMPILE)	-o $(OBJOUTPATH)/idt.arch.o		-c idt.c
+	$(COMPILE)	-o $(OBJOUTPATH)/pic.arch.o		-c pic.c
+	$(COMPILE)	-o $(OBJOUTPATH)/panic.arch.o		-c panic.c
 
 	cd memory && make objfiles
+	cd int_routines && make objfiles
 
 clean:
 	-rm -r $(wildcard $(OBJOUTPATH)/*.arch.o)

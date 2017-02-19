@@ -2,22 +2,38 @@
 #include <stdio.h>
 #include <tty/tty.h>
 #include <kernel/gdt.h>
+#include <kernel/idt.h>
+#include <kernel/pit.h>
+#include <kernel/pic.h>
+#include <system/sleep.h>
 
 void kernel_main(void)
 {
 	// Initialize terminal, for being able to write.
 	terminal_initialize();
 
+	// Initialize the GDT.
+	gdt_init();
+	
+	// Initialize the IDT.
+	idt_init();
+	
 	// Initialize the paging.
 	paging_init();
 
-	// Initialize the GDT.
-	gdt_init();
+	// Initialse the PIC
+	pic_init();
 
-	//Test:
-	printf("Testing \n");
-	printf("%h", 0x123abc);
-	printf(" %h %h %h %h\n", 12345678, 0x123abcff, 0, 0xffffffff);
+	// Initialze PIT.
+	pit_init();
+	//asm volatile ("int $0x20");
 
-	printf("%u %u %u", 9, 123, 13371337);
+	while(1) 
+	{
+		static uint32_t i = 0;
+		sleep(1000);
+		printf("Done sleeping, going back to sleep: %u \n", i);
+		i++;
+	}
+
 }

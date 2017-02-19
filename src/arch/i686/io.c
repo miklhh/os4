@@ -1,6 +1,8 @@
-/* ********************************************** *
- * Functions for using the processor input output 
- * ********************************************** */
+/*
+ * Part of OS4, io.c
+ * Author: Mikael Henriksson, miklhh
+ */
+
 #include <kernel/io.h>
 
 
@@ -30,4 +32,19 @@ uint16_t inw (uint16_t port)
 void outw (uint16_t value, uint16_t port)
 {
 	asm volatile ("outw %0, %1" :: "a"(value), "Nd"(port));
+}
+
+/* 32-bit (a long) port in function. */
+uint32_t inl(uint16_t port)
+{
+	uint32_t value;
+	asm volatile ("inl %1, %0" : "=a"(value) : "Nd"(port));
+	return value;
+}
+
+/* 32-bit (a long) port out function. */
+void outl (uint32_t value, uint16_t port)
+{
+	asm volatile ("outl %0, %1" :: "a"(value), "Nd"(port));
+
 }

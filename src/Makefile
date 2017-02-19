@@ -51,7 +51,7 @@ os: $(LINKFILES) $(CRTBEGIN_OBJ) $(CRTEND_OBJ) $(CRTI_OBJ) $(CRTN_OBJ)
 	$(LINKER)	-o $(BUILDPATH)/os.bin 		$(OBJ_LINK_ORDER)
 
 iso:
-	echo "I am not ready for this yet..."
+	@echo "I am not ready for this yet..."
 
 clean:
 	-rm -rf $(SYSROOT)/usr		# Remove all the sysroot files.

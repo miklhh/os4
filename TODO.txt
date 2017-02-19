@@ -1,11 +1,16 @@
-(!0!).	- Include guards on everything. How can this have been forgoten...
-
-1. 	- Complete the GDT.
-	- Make sure to comment printf.c.
-	- Start looking into some time programming.
+1. 	- Make sure to comment printf.c.
 	- Comment tty.h
-	- Can't make all yet. The wildcard does not agnolage the objfiles, 
-	  since the objfiles does not exist on variable load.
+	- Log all the interrupt handlers.
+	- Make a keyboard driver.
+
+2.	- Put my name (author) in every sourcefile.
+	- Think of a new OS name?
+	- Remove -g flag on release (so that debug symbols wont be avaliable in binary).
+
+Good to know:
+	- It's not very clever to try interrupts before the GDT has been setup, since
+	  every interrupt selects a descriptor from the GDT. I found out the hard way...
+	  
 
 REMEMBER:
 The -MD flag has been removed from comilation in hope of not creating those

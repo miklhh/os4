@@ -1,3 +1,8 @@
+/*
+ * Part of OS4, gdt.c
+ * Author: Mikael Henriksson, miklhh
+ */
+
 #include <stdint.h>
 #include <stddef.h>
 #include <iso646.h>
@@ -68,23 +73,23 @@ void gdt_init()
 			FLAG_NOT_EXECUTABLE | FLAG_READWRITEBIT | FLAG_GRANULARITY_PAGE));
 	
 	/* Give the gdt to the CPU. */
-	*(uint16_t*)gdtr_location = (gdt_size - 1) & 0x0000FFFF;	// Set the size of the GDT.
+	*(uint16_t*)gdtr_location = (gdt_size - 1) & 0x0000FFFF;
 	*(uint32_t*)(gdtr_location + 2) = gdt_pointer;
 
 	/* Set the global descriptortable register and reload the segments. */
-	asm volatile("cli"::);	// Cliear interrupts.
+	//asm volatile("cli");	// Cliear interrupts.
 
 	_set_gdtr();
-	printf("GDTR was set. GDTR-size = %h, GDTR-offset = %h\n",
+	printf("GDTR was set. GDTR-size = %h, GDTR-memory-offset = %h\n",
 		*(uint16_t*)gdtr_location + 1,
 		*(uint32_t*)(gdtr_location + 2));
 	_reload_segments();
 	printf("Segments reloaded.\n");
 	
-	asm volatile("sti"::);	//Restore interrupts.
+	//asm volatile("sti");	//Restore interrupts.
 
 	/* The descriptor has been set up and is running. */
-	printf("New GDT had been loaded to the CPU.\n");
+	printf("New GDT has been loaded by the CPU.\n");
 	printf("-------\n");
 }
 
