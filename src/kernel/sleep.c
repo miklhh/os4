@@ -16,7 +16,7 @@ void sleep(uint32_t time_ms)
 
 	while (tick_on_start + time_ms >= pic_tick)
 	{
-		/* Do nothing... */
+		asm volatile ("hlt");
 	}
 	return;
 }

@@ -1,5 +1,9 @@
 --- Version information ---
 
+-- Alpha 1.1.1 2017-02-20
+ - Fixed the sleep function.
+With the sleep function fixed, the os behaves the same on VirtualBox aswell as QEMU.
+
 -- Alpha 1.1.0 2017-02-19
  - Code for interrupts added.
  - Code for PIC added.
