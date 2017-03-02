@@ -1,4 +1,10 @@
 /*
+ * Part of OS4, paging.c
+ * Author: Mikael Henriksson, miklhh
+ */
+
+
+/*
  * This file 'paging.c' is heavaly influenced by 'levex' OSDEV source code.
  * LINK: "https://github.com/levex/osdev/"  
  */
@@ -25,7 +31,7 @@ void paging_enable()
 void paging_map_virtual_to_phys(uint32_t virt, uint32_t phys)
 {
 	uint16_t id = virt >> 22;
-	for(int i = 0; i < 1024; i++)
+	for (uint16_t i = 0; i < 1024; i++)
 	{
 		last_page[i] = phys | 0x03;
 		phys += 4096;

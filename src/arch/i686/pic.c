@@ -42,5 +42,5 @@ void pic_init()
 	outb(0x01, PIC2_DATA);		// Enable 8086-mode (PIC2).
 	outb(0x00, PIC1_DATA);		// Reset the mask level (PIC1).
 	outb(0x00, PIC2_DATA);		// Reset the mask level (PIC2).
-	printf("PIT initialized!\n");
+	printf("PIC initialized!\n");
 }

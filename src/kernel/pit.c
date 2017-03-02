@@ -14,11 +14,11 @@
 extern void pit_irq_wrapper();
 
 /* Global tick variable */
-volatile uint32_t pic_tick = 0;
+volatile uint32_t __sys_tick = 0;
 
 void pit_irq()
 {
-	pic_tick++;
+	__sys_tick++;
 	pic_send_eoi(0);
 }
 

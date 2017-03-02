@@ -1,3 +1,9 @@
+/*
+ * Part of OS4, string.h
+ * Author Mikael Henriksson, miklhh
+ */
+
+
 #ifndef _STRING_H
 #define _STRING_H
 
@@ -25,7 +31,7 @@ void* memmove(void* destination, const void* source, size_t bytes);
 
 
 /*** Memory set
- * Sets the n-th character in the string str to 'c'.
+ * Sets n character in the string str to 'c'.
  * ---------------------------------------------------------------------------*/
 void* memset (void* str, int c, size_t n);
 

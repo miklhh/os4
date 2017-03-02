@@ -6,10 +6,12 @@
 #ifndef _PIT_H
 #define _PIT_H
 
+/* Functions */
 void pit_init();
 
 /* PIT tick-rate constant */
 #define PIT_TICK_RATE 1000
+#define PIT_FREQUENXY 1193182
 
 /* PIT Macros */
 #define PIT_REG_COUNTER0 0x40

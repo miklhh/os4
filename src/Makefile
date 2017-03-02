@@ -12,7 +12,8 @@ OBJOUTPATH = $(BUILDPATH)/objfiles
 #Linkfiles, excluding crti.o, crtn.o, crtbegin.o and crtend.o
 LINKFILES = $(wildcard $(OBJOUTPATH)/*.kernel.o) \
 	    $(wildcard $(OBJOUTPATH)/*.driver.o) \
-	    $(wildcard $(OBJOUTPATH)/*.arch.o)
+	    $(wildcard $(OBJOUTPATH)/*.arch.o) \
+	    $(wildcard $(OBJOUTPATH)/*.memory.o)
 
 #CRT-linkfiles:
 CRTI_OBJ = $(OBJOUTPATH)/crti.crtx.o
@@ -36,6 +37,7 @@ headers:
 	cd drivers && $(MAKE) headers
 	cd kernel && $(MAKE) headers 
 	cd arch && $(MAKE) headers
+	cd memory && $(MAKE) headers
 
 objfiles:
 	-mkdir -p $(BUILDPATH)/objfiles
@@ -43,6 +45,7 @@ objfiles:
 	cd drivers && $(MAKE) objfiles
 	cd kernel && $(MAKE) objfiles
 	cd arch && $(MAKE) objfiles
+	cd memory && $(MAKE) objfiles
 
 libs:
 	cd libc && $(MAKE) libk
@@ -59,6 +62,3 @@ clean:
 	-rm $(BUILDPATH)/os.bin
 	-rm $(BUILDPATH)/os.iso
 
-# MAKE ALL WILL BE COMENTED OUT UNTIL A FIX FOR THE REASIGMENT OF VARIABLE
-# HAS BEEN THOUGHT OF.
-# all: headers objfiles libs os 

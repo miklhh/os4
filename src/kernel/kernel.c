@@ -1,4 +1,10 @@
+/*
+ * Part of OS4, kernel.c
+ * Author Mikael Henriksson, miklhh
+ */
+
 #include <memory/paging.h>
+#include <memory/memory.h>
 #include <stdio.h>
 #include <tty/tty.h>
 #include <kernel/gdt.h>
@@ -6,6 +12,10 @@
 #include <kernel/pit.h>
 #include <kernel/pic.h>
 #include <system/sleep.h>
+#include <string.h>
+
+extern uint32_t __kernel_start;
+extern uint32_t __kernel_end;
 
 void kernel_main(void)
 {
@@ -26,8 +36,25 @@ void kernel_main(void)
 
 	// Initialze PIT.
 	pit_init();
-	//asm volatile ("int $0x20");
 
+	// Test the labels.
+	printf("Kernel start: %h, and kernel end: %h\n", &__kernel_start, &__kernel_end);
+
+	// Initalize the heap data.
+	mm_init(&__kernel_end);
+
+	/* ------------------------------------------------ */
+
+	char* string1 = malloc(sizeof(char[27]));
+	char* string2 = malloc(sizeof(char[29]));
+	memcpy(string1, "Hello world!", 13);
+	memcpy(string2, "I am located on the heap!\n",26);
+
+	mm_print();
+
+	printf(string1);
+	printf("\n");
+	printf(string2);
 	while(1) 
 	{
 		static uint32_t i = 0;
@@ -35,5 +62,4 @@ void kernel_main(void)
 		printf("Done sleeping, going back to sleep: %u \n", i);
 		i++;
 	}
-
 }

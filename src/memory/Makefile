@@ -1,9 +1,9 @@
 ###Include:
-include ../../../make.config
+include ../make.config
 GCC = $(CROSSCOMPILER)
 
 ###Paths:
-BUILD = ../../../../build
+BUILD = ../../build
 SYSROOT = $(BUILD)/sysroot
 OBJOUTPATH = $(BUILD)/objfiles
 
@@ -21,7 +21,8 @@ headers:
 	cp -r include/ $(SYSROOT)/usr/
 
 objfiles: $(SOURCES)
-	$(COMPILE) -o $(OBJOUTPATH)/paging.arch.o -c paging.c
+	$(COMPILE) -o $(OBJOUTPATH)/paging.memory.o 	-c paging.c
+	$(COMPILE) -o $(OBJOUTPATH)/memory.memory.o 	-c memory.c
 
 clean:
 	@echo "Nothing to clean here"

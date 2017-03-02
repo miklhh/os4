@@ -30,6 +30,7 @@ objfiles:
 	$(COMPILE) -o $(OBJOUTPATH)/kernel.kernel.o 	-c kernel.c
 	$(COMPILE) -o $(OBJOUTPATH)/pit.kernel.o	-c pit.c
 	$(COMPILE) -o $(OBJOUTPATH)/sleep.kernel.o	-c sleep.c
+	$(COMPILE) -o $(OBJOUTPATH)/panic.kernel.o	-c panic.c
 
 clean:
 	-rm -r $(SYSROOT)/usr/include/kernel

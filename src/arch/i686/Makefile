@@ -19,7 +19,6 @@ COMPILE = $(GCC) $(CFLAGS) -D__is_kernel -Iinclude --sysroot=$(SYSROOT) \
 
 ###Recipes:
 headers:
-	cd memory && make headers
 	cd int_routines && make headers
 	mkdir -p $(SYSROOT)/usr/include
 	cp -r include/ $(SYSROOT)/usr/
@@ -34,9 +33,6 @@ objfiles: $(SOURCES)
 	$(COMPILE)	-o $(OBJOUTPATH)/gdt.arch.o		-c gdt.c
 	$(COMPILE)	-o $(OBJOUTPATH)/idt.arch.o		-c idt.c
 	$(COMPILE)	-o $(OBJOUTPATH)/pic.arch.o		-c pic.c
-	$(COMPILE)	-o $(OBJOUTPATH)/panic.arch.o		-c panic.c
-
-	cd memory && make objfiles
 	cd int_routines && make objfiles
 
 clean:
