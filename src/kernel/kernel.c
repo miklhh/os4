@@ -6,7 +6,8 @@
 #include <memory/paging.h>
 #include <memory/memory.h>
 #include <stdio.h>
-#include <tty/tty.h>
+#include <driver/tty.h>
+#include <driver/keyboard.h>
 #include <kernel/gdt.h>
 #include <kernel/idt.h>
 #include <kernel/pit.h>
@@ -43,23 +44,20 @@ void kernel_main(void)
 	// Initalize the heap data.
 	mm_init(&__kernel_end);
 
+	// Initialize keyboard driver.
+	keyboard_init();
+
+
 	/* ------------------------------------------------ */
 
-	char* string1 = malloc(sizeof(char[27]));
-	char* string2 = malloc(sizeof(char[29]));
-	memcpy(string1, "Hello world!", 13);
-	memcpy(string2, "I am located on the heap!\n",26);
-
-	mm_print();
-
-	printf(string1);
-	printf("\n");
-	printf(string2);
-	while(1) 
+	/* Testing keyboard. */
+	while (1)
 	{
-		static uint32_t i = 0;
-		sleep(1000);
-		printf("Done sleeping, going back to sleep: %u \n", i);
-		i++;
+		char c = keyboard_get_key();
+		if (c)
+		{
+			putchar(c);
+		}
+		asm volatile ("hlt");
 	}
 }

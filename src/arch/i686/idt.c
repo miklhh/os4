@@ -13,7 +13,7 @@
 static uint32_t idtr_location =	0;
 static uint32_t idt_location = 0;
 static uint16_t idt_size = 0x800;
-static uint8_t idt_initialized = 0;
+static uint8_t 	idt_initialized = 0;
 
 /* Extern functions */
 extern void	_set_idtr();

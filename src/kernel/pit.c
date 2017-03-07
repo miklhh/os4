@@ -40,8 +40,8 @@ static void pit_start_counter (uint32_t freq, uint8_t counter, uint8_t mode)
 		
 	/* Send operational command words. */
 	uint8_t ocw = 0;
-	ocw = (ocw & ~PIT_OCW_MASK_MODE) | mode;
-	ocw = (ocw & ~PIT_OCW_MASK_RL) | PIT_OCW_RL_DATA;
+	ocw = (ocw & ~PIT_OCW_MASK_MODE)    | mode;
+	ocw = (ocw & ~PIT_OCW_MASK_RL) 	    | PIT_OCW_RL_DATA;
 	ocw = (ocw & ~PIT_OCW_MASK_COUNTER) | counter;
 	outb(ocw, 0x43);
 

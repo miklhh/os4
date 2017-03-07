@@ -1,7 +1,7 @@
-1. 	- Make sure to comment printf.c.
-	- Comment tty.h
-	- Log all the interrupt handlers.
-	- Make a keyboard driver.
+1. 	- Log all the interrupt handlers.
+	- Keyboard driver needs more support.
+	- Start looking into multitasking.
+	- Start looking into 
 
 2.	- Put my name (author) in every sourcefile.
 	- Think of a new OS name?
@@ -10,7 +10,7 @@
 
 Good to know:
 	- It's not very clever to try interrupts before the GDT has been setup, since
-	  every interrupt selects a descriptor from the GDT. I found out the hard way...
+	  every interrupt selects a descriptor from the GDT. I found this out the hard way...
 	  
 
 REMEMBER:

@@ -30,6 +30,8 @@ objfiles:
 		    _set_idtr.asm
 	$(ASSEMBLE) -o $(OBJOUTPATH)/pit_irq_wrapper.arch.o \
 		    pit_irq_wrapper.asm
+	$(ASSEMBLE) -o $(OBJOUTPATH)/keyboard_irq_wrapper.arch.o \
+		    keyboard_irq_wrapper.asm
 
 	$(COMPILE) -o $(OBJOUTPATH)/interrupt_test_handler.arch.o \
 		   -c interrupt_test_handler.c

@@ -1,5 +1,8 @@
 --- Version information ---
 
+-- Alpga 1.2.1
+ - Super basic keyboard driver added.
+
 -- Alpha 1.2.0
  - Heap allocation function 'malloc' and 'free' added.
 Heap allocation for the kernel has finally been added, and some test with it has been done.
