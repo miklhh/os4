@@ -9,6 +9,8 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <kernel/gdt.h>
+#include "tss_entry_struct.h"
+#include <string.h>
 
 /* The structure for the GDT can be found on:
  * http://wiki.osdev.org/GDT 	[1]
@@ -22,6 +24,7 @@
 #define FLAG_EXECUTABLE		(1 << 3)
 #define FLAG_NOT_EXECUTABLE	(0 << 3)
 #define FLAG_READWRITEBIT	(1 << 1)
+#define FLAG_ACCESSBIT		(1 << 0)
 
 #define RING_LEVEL(x)		(x << 5)
 #define FLAG_GRANULARITY_BYTE 	(0 << 15)
@@ -36,10 +39,13 @@
 
 extern void _set_gdtr();
 extern void _reload_segments();
+extern uint32_t interrupt_stack_top;
 
 static uint32_t gdt_pointer = 0;
 static uint32_t gdt_size = 0;
 static uint32_t gdtr_location = 0;
+struct tss_entry_struct tss_entry;
+
 
 void gdt_init()
 {
@@ -50,49 +56,102 @@ void gdt_init()
 	printf("GDT-Start location (in memory): %h\n", gdt_pointer);
 	printf("GDT-Descriptor location (in memory): %h\n", gdtr_location);
 
-	/* ------------ Fill the GDT. ---------- */
-	/* Null descriptor. Entry 0. */
+	/* -------------------------------------------------------------------------------/
+	 * ------------------------------- GDT Content -----------------------------------/
+	 * ------------------------------------------------------------------------------*/
+	/* Null descriptor. Entry 0. Offset 0x00 */
 	gdt_add_descriptor(0, 0);
 
-	/* Kernel code segment. Entry 1. */
+	/* Kernel code segment. Entry 1. Offset 0x08. */
 	gdt_add_descriptor(
 		1, 
 		gdt_create_descriptor(
-			0x00000000, 
-			0xFFFFF,
+			0x00000000, 		// Descriptor start address.
+			0xFFFFF,		// Descripted size (in pages (4096 bytes)).
 			FLAG_VALID_SECTOR | FLAG_PROTECTED_MODE | RING_LEVEL(0) | 
 			FLAG_EXECUTABLE | FLAG_READWRITEBIT | FLAG_GRANULARITY_PAGE));
 
-	/* Kernel data segment. Entry 2. */
+	/* Kernel data segment. Entry 2. Offset 0x10. */
 	gdt_add_descriptor(
 		2,
 		gdt_create_descriptor(
-			0x00000000,
-			0xFFFFF,
+			0x00000000,		// Descriptor start address.
+			0xFFFFF,		// Descripted size (in pages (4096 bytes)).
 			FLAG_VALID_SECTOR | FLAG_PROTECTED_MODE | RING_LEVEL(0) |
 			FLAG_NOT_EXECUTABLE | FLAG_READWRITEBIT | FLAG_GRANULARITY_PAGE));
+
+	/* User code segment. Entry 3. Offset 0x18. */
+	gdt_add_descriptor(
+		3,
+		gdt_create_descriptor(
+			0x00000000,		// Descriptor start address.
+			0xFFFFF,		// Descripted size (in pages (4096 bytes)).
+			FLAG_VALID_SECTOR | FLAG_PROTECTED_MODE | RING_LEVEL(3) |
+			FLAG_EXECUTABLE | FLAG_READWRITEBIT | FLAG_GRANULARITY_PAGE));
+
+	/* User data segment. Entry 4. Offset 0x20. */
+	gdt_add_descriptor(
+		4,
+		gdt_create_descriptor(
+			0x00000000,		// Descriptor start address.
+			0xFFFFF,		// Descripted size (in pages (4096 bytes)).
+			FLAG_VALID_SECTOR | FLAG_PROTECTED_MODE | RING_LEVEL(3) |
+			FLAG_NOT_EXECUTABLE | FLAG_READWRITEBIT | FLAG_GRANULARITY_PAGE));
+	/* TSS entry. */
+	gdt_add_descriptor(
+		5,
+		gdt_create_descriptor(
+			(uint32_t) &tss_entry,
+			sizeof(tss_entry),
+			FLAG_PRESENT | FLAG_EXECUTABLE | FLAG_ACCESSBIT |
+			FLAG_GRANULARITY_PAGE));
+			
 	
 	/* Give the gdt to the CPU. */
 	*(uint16_t*)gdtr_location = (gdt_size - 1) & 0x0000FFFF;
 	*(uint32_t*)(gdtr_location + 2) = gdt_pointer;
 
 	/* Set the global descriptortable register and reload the segments. */
-	//asm volatile("cli");	// Cliear interrupts.
-
 	_set_gdtr();
 	printf("GDTR was set. GDTR-size = %h, GDTR-memory-offset = %h\n",
 		*(uint16_t*)gdtr_location + 1,
 		*(uint32_t*)(gdtr_location + 2));
 	_reload_segments();
 	printf("Segments reloaded.\n");
-	
-	//asm volatile("sti");	//Restore interrupts.
 
+	/* Setup the TSS-entry and load it. */
+	memset(&tss_entry, 0, sizeof(tss_entry));	// Clear the entry.
+	tss_entry.ss0	= 0x10;				// Use kernel data entry.
+	tss_entry.esp0	= 0x00;				// Edited with 'set_kernel_stack'.
+	tss_entry.cs	= 0x0b;
+	tss_entry.ss	= 0x13;
+	tss_entry.ds	= 0x13;
+	tss_entry.fs	= 0x13;
+	tss_entry.gs	= 0x13;
+
+	/* 'Load tast register'. */
+	asm volatile(	"movw 	$0x2b, %%ax;  \
+			 ltr 	%%ax;" 
+			: : : "%ax");
+	
 	/* The descriptor has been set up and is running. */
 	printf("New GDT has been loaded by the CPU.\n");
 	printf("-------\n");
 }
 
+void set_kernel_stack()
+{
+	uint32_t stack = (uint32_t) &interrupt_stack_top;
+	/*
+	asm volatile(	"movl %%esp, %%eax; \
+			 addl $12, %%eax;    \
+			 movl %%eax, %0;"
+			:"=r"(stack)		// Output.
+			:			// Input (none).
+			:"%eax");		// Clobbered register.
+	*/
+	tss_entry.esp0 = stack;
+}
 
 int gdt_add_descriptor(uint8_t id, uint64_t desc)
 {

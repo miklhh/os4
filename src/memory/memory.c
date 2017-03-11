@@ -23,7 +23,7 @@ static uint32_t memory_used	= 0;
 
 /* Function declaring */
 void  mm_init(uint32_t);
-void* malloc(size_t size);
+void* kmalloc(size_t size);
 void  free(void* mem);
 
 /* Memory management init function. */
@@ -40,7 +40,7 @@ void mm_init(uint32_t kernel_end)
 	memset((char*) heap_start, 0, heap_end - heap_start);
 
 	/* Setup the Page-heap descriptor. */
-	pheap_desc = (uint8_t*) malloc(MAX_PAGE_ALIGNED_ALLOCS);
+	pheap_desc = (uint8_t*) kmalloc(MAX_PAGE_ALIGNED_ALLOCS);
 
 	/* Done, print and return. */
 	printf("Kernel heap memory setup. Kernel heap start: %h\n", heap_start);
@@ -56,7 +56,7 @@ void mm_print()
 }
 
 
-void* malloc(size_t size)
+void* kmalloc(size_t size)
 {
 	if (size == 0) return (void*) 0;
 	
@@ -118,7 +118,7 @@ void* malloc(size_t size)
 }
 
 
-void free(void *mem)
+void kfree(void *mem)
 {
 	alloc_t* alloc = (alloc_t*) (mem - sizeof(alloc_t));
 	memory_used -= alloc->size + sizeof(alloc_t);

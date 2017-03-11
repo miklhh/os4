@@ -25,6 +25,9 @@ headers:
 
 objfiles: $(SOURCES)
 	$(ASSEMBLE) 	-o $(OBJOUTPATH)/boot.arch.o	   	boot.asm
+	$(ASSEMBLE) 	-o $(OBJOUTPATH)/task.arch.o	   	task.asm
+	$(ASSEMBLE) 	-o $(OBJOUTPATH)/load_page_directory.arch.o load_page_directory.asm
+	$(ASSEMBLE) 	-o $(OBJOUTPATH)/enable_paging.arch.o  	enable_paging.asm
 	$(ASSEMBLE) 	-o $(OBJOUTPATH)/crtn.crtx.o	   	crtn.asm
 	$(ASSEMBLE) 	-o $(OBJOUTPATH)/crti.crtx.o	   	crti.asm
 	#Comment: The prefix *.crtx.o is used so that the linkers wildcard
@@ -33,6 +36,7 @@ objfiles: $(SOURCES)
 	$(COMPILE)	-o $(OBJOUTPATH)/gdt.arch.o		-c gdt.c
 	$(COMPILE)	-o $(OBJOUTPATH)/idt.arch.o		-c idt.c
 	$(COMPILE)	-o $(OBJOUTPATH)/pic.arch.o		-c pic.c
+	$(COMPILE)	-o $(OBJOUTPATH)/exceptions.arch.o	-c exceptions.c
 	cd int_routines && make objfiles
 
 clean:

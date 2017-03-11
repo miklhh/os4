@@ -16,8 +16,8 @@ typedef struct
 } alloc_t;
 
 /* Allocation functions */
-void*	malloc(size_t mem);
-void 	free(void* mem);
+void*	kmalloc(size_t mem);
+void 	kfree(void* mem);
 void 	mm_init();
 void 	mm_print();
 

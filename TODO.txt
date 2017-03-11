@@ -1,4 +1,6 @@
-1. 	- Log all the interrupt handlers.
+1. 	- Setup a SYSCALL interface.
+	- Fix multitasking.
+	- Log all the interrupt handlers.
 	- Keyboard driver needs more support.
 	- Start looking into multitasking.
 	- Start looking into 

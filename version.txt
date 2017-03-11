@@ -1,6 +1,11 @@
 --- Version information ---
 
--- Alpga 1.2.1
+-- Alpha 1.2.2
+ - Method for switching to usermode added.
+ - Start of a new paging system.
+Also some additional small changes to the code has been done.
+
+-- Alpha 1.2.1
  - Super basic keyboard driver added.
 
 -- Alpha 1.2.0

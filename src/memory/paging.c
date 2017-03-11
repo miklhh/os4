@@ -1,59 +1,74 @@
 /*
- * Part of OS4, paging.c
+ * Part of OS4, paging2.c
  * Author: Mikael Henriksson, miklhh
  */
 
-
-/*
- * This file 'paging.c' is heavaly influenced by 'levex' OSDEV source code.
- * LINK: "https://github.com/levex/osdev/"  
- */
-#include <stdint.h>
+#include <memory/memory.h>
 #include <stdio.h>
+#include <kernel/panic.h>
 
-static uint32_t* 	page_directory = 0;
-static uint32_t*	last_page = 0;
+#define MAX_PAGE_DIRECTORY_ENTRIES 1024
 
-void paging_enable()
-{
-	/* Load the page directory location to Control Register 3. Then set the
-	 * paging bit of Control Register 0 */
-	uint32_t pagedir_loc = (uint32_t) page_directory;
-	asm volatile	("mov %%eax, %%cr3"
-			 : // No output
-			 :"a"(pagedir_loc)
-			);
-	asm volatile("mov %cr0, %eax");
-	asm volatile("or $0x80000000, %eax");
-	asm volatile("mov %eax, %cr0");
-}
+#define PAGE_DIR_PAGE_SIZE_BIT		(1 << 7)
+#define PAGE_DIR_ACCESSED_BIT		(1 << 5)
+#define PAGE_DIR_CACHE_DISABLE_BIT	(1 << 4)
+#define PAGE_DIR_WRITE_THROUGH_BIT	(1 << 3)
+#define PAGE_DIR_USER_BIT		(1 << 2)
+#define PAGE_DIR_READ_WRITE_BIT		(1 << 1)
+#define PAGE_DIR_PRESENT_BIT		(1 << 0)
 
-void paging_map_virtual_to_phys(uint32_t virt, uint32_t phys)
-{
-	uint16_t id = virt >> 22;
-	for (uint16_t i = 0; i < 1024; i++)
-	{
-		last_page[i] = phys | 0x03;
-		phys += 4096;
-	}
-	page_directory[id] = ((uint32_t) last_page) | 3;
-	last_page = (uint32_t*) (((uint32_t) last_page) + 4096);
-	printf("Mapping %h to %h.\n", virt, phys);
-}
+#define PAGE_TABLE_GLOBAL_BIT		(1 << 8)
+#define PAGE_TABLE_DIRTY_BIT		(1 << 6)
+#define PAGE_TABLE_ACCESSED_BIT		(1 << 5)
+#define PAGE_TABLE_CACHE_DISSABLED_BIT	(1 << 4)
+#define PAGE_TABLE_WRITE_THROUGH_BIT	(1 << 3)
+#define PAGE_TABLE_USER_BIT		(1 << 2)
+#define PAGE_TABLE_READ_WRITE_BIT	(1 << 1)
+#define PAGE_TABLE_PRESENT_BIT		(1 << 0)
+
+/* Change these when a page-frame allocater has been added. */
+static uint32_t page_directory[1024] __attribute__((aligned(4096)));
+static uint32_t test_page_table[1024] __attribute__((aligned(4096)));
+
+extern void load_page_directory(uint32_t* page_dir);
+extern void enable_paging();
 
 void paging_init()
 {
-	printf("------| Setting up paging. |-----\n");
-	page_directory = (uint32_t*)0x400000;
-	last_page = (uint32_t*) 0x404000;
-	
-	for(int i = 0; i < 1024; i++)
+	/* Make sure the page-directory has been properly 4k-aligned. */
+	if ((uint32_t)page_directory % 0x1000 != 0)
 	{
-		page_directory[i] = 0 | 2;
+		panic("Kernel panic: Could not 4k-align the Page-Directory.");
 	}
 
-	paging_map_virtual_to_phys(0, 0);
-	paging_map_virtual_to_phys(0x400000, 0x400000);
-	paging_enable();
-	printf("------| Paging initialized.|-----\n");
+	printf("Page-directory start location: %h\n", (uint32_t) page_directory);
+
+	/* Set all the entries in the page directory to non-present. */
+	for (uint16_t i = 0; i < 1024; i++)
+	{
+		page_directory[i] = PAGE_DIR_READ_WRITE_BIT;
+	}
+
+	/* Create a page table and */
+	for (uint16_t i = 0; i < 1024; i++)
+	{
+		test_page_table[i] = 	(i * 0x1000) 			| 
+					PAGE_TABLE_PRESENT_BIT 		|
+					PAGE_TABLE_READ_WRITE_BIT	|
+					PAGE_TABLE_USER_BIT;
+	}
+
+	/* Add the page table to the page directory. */
+	page_directory[0] = 	((uint32_t) test_page_table) 	|
+				PAGE_DIR_PRESENT_BIT 		|
+				PAGE_DIR_READ_WRITE_BIT		|
+				PAGE_DIR_USER_BIT;
+	
+	/* Enable paging */
+	load_page_directory(page_directory);
+	enable_paging();
+	printf("Paging enabled.\n");
+
 }
+
+

@@ -60,7 +60,7 @@ void idt_init()
 
 	
 	asm volatile("sti");		// Enable interrupts again.
-	asm volatile("int $0x2f");	// Test an interrupt.
+	asm volatile("int $0x2f");	// Preform a test interrupt.
 	idt_initialized = 1;
 
 }
@@ -75,7 +75,7 @@ void set_int(uint8_t i, uint32_t callback, uint8_t type_attribute)
 	else
 	{
 		printf(
-		   "Setting new interrupt INT #%u to address: %h, with attribute: %h\n", 
+		   "Adding new interrupt INT #%u to address: %h, with attribute: %h\n", 
 	   	   i,
 	   	   callback,
 		   type_attribute);

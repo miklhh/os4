@@ -32,6 +32,8 @@ objfiles:
 		    pit_irq_wrapper.asm
 	$(ASSEMBLE) -o $(OBJOUTPATH)/keyboard_irq_wrapper.arch.o \
 		    keyboard_irq_wrapper.asm
+	$(ASSEMBLE) -o $(OBJOUTPATH)/exception_wrappers.arch.o \
+		    exception_wrappers.asm
 
 	$(COMPILE) -o $(OBJOUTPATH)/interrupt_test_handler.arch.o \
 		   -c interrupt_test_handler.c

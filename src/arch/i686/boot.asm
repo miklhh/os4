@@ -22,9 +22,14 @@ align 4
 
 ; -- Stack after booting.
 section .bss
-align 16			; Align 4 tested, did not work.
+align 	16
+interrupt_stack_bottom:
+resb	32768
+global interrupt_stack_top
+interrupt_stack_top:
+resb	4
 kernel_stack_bottom:
-resb 32768
+resb 	32768
 kernel_stack_top:
 
 
@@ -34,35 +39,33 @@ section .text
 ; -- Function for loading the GDT-register.
 global _set_gdtr:function (_set_gdtr.end - _set_gdtr)
 _set_gdtr:
-	push ebp	
-	mov ebp, esp
-
-	lgdt [0x800]
-
-	mov esp, ebp
-	pop ebp
+	push  ebp	
+	mov   ebp, esp
+	lgdt  [0x800]
+	mov   esp, ebp
+	pop   ebp
 	ret
 .end:
 
 ; -- Function for reloading the segments.
 global _reload_segments:function (_reload_segments.end - _reload_segments)
 _reload_segments:
-	push ebp
-	mov ebp, esp
+	push  ebp
+	mov   ebp, esp
 
-	push eax
-	mov ax, 0x10 		; Load 0x10 into the ds-register. (and others).
-	mov ds, ax
-	mov es, ax
-	mov fs, ax
-	mov gs, ax
-	mov ss, ax
-	pop eax
+	push  eax
+	mov   ax, 0x10 		; Load 0x10 into the ds-register. (and others).
+	mov   ds, ax
+	mov   es, ax
+	mov   fs, ax
+	mov   gs, ax
+	mov   ss, ax
+	pop   eax
 
-	jmp 0x08:.rscontinue 	; Load 0x08 into the cs-register. 
+	jmp   0x08:.rscontinue 	; Load 0x08 into the cs-register. 
 .rscontinue:
-	mov esp, ebp
-	pop ebp
+	mov   esp, ebp
+	pop   ebp
 	ret
 .end:
 
@@ -71,13 +74,13 @@ global _start:function (_start.end - _start)
 _start:
 
 	; Setup the stack, call the global constructor and call the kernel
-	mov esp, kernel_stack_top
+	mov 	esp, kernel_stack_top
 
-	extern _init
-	call _init
+	extern 	_init
+	call	_init
 
-	extern kernel_main
-	call kernel_main
+	extern 	kernel_main
+	call 	kernel_main
 
 	; Halt the kernel if the OS by some reason returns.
 	cli

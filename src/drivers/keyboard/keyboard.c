@@ -23,7 +23,7 @@ extern void keyboard_irq_wrapper();
 void keyboard_init()
 {
 	printf("Initializing PS/2-Keyboard routines.\n");
-	keybuffer = (char*) malloc(256);
+	keybuffer = (char*) kmalloc(256);
 	memset(keybuffer, 0, 256);
 	set_int(
 		0x21, 						// 0x21, IRQ-1.
@@ -102,5 +102,4 @@ void keyboard_irq()
 	 * interrupt (IRQ1) to the PIC */
 	keybuffer[key_loc++] = keyboard_to_ascii(inb(0x60));
 	pic_send_eoi(1);
-
 }
