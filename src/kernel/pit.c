@@ -55,9 +55,9 @@ void pit_init()
 	/* Please note that the pit_irq_wrapper function is set as the callback function.
 	 * the wrapperfunction will than call the pit_irq function. */
 	set_int(
-	     0x20,					// Interrupt vector.
-	     (uint32_t) &pit_irq_wrapper,		// Callback function.
-	     IDT_32BIT_INTERRUPT_GATE | IDT_PRESENT);	// Type-attributes.
+	     0x20,                                      // Interrupt vector.
+	     (uint32_t) &pit_irq_wrapper,               // Callback function.
+	     IDT_32BIT_INTERRUPT_GATE | IDT_PRESENT);   // Type-attributes.
 	printf("Interruptvector #32 (IRQ #0) set as PIT_IRQ.\n");
 	pit_start_counter(PIT_TICK_RATE, PIT_OCW_COUNTER_0, PIT_OCW_MODE_SQUAREWAVEGEN);
 

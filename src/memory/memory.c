@@ -46,6 +46,21 @@ void mm_init(uint32_t kernel_end)
 	printf("Kernel heap memory setup. Kernel heap start: %h\n", heap_start);
 }
 
+/* Kernel malloc, page alligned. There is, for the record no way of
+ * freeing this kind of memory. Please don not try to use the standard
+ * kfree to free this memory.*/
+void* kmalloc_p(size_t size, uint32_t* phys)
+{
+	/* This is a real waste. Redo later. Create a page aligned allocation. */
+	void* address = kmalloc(size + 0x1000);
+	address = (void*) ((uint32_t) address & 0xFFFFF000);
+	address = (void*) ((uint32_t) address + 0x1000);
+
+	*phys = *(uint32_t*)address;
+	return address;
+}
+
+/* Used for debung, print kernel heap information. */
 void mm_print()
 {
 	printf("Heap-memory used: %u bytes\n", memory_used);
@@ -55,7 +70,7 @@ void mm_print()
 	printf("Heap end: %h\n", heap_end);
 }
 
-
+/* Vanilla kmalloc. */
 void* kmalloc(size_t size)
 {
 	if (size == 0) return (void*) 0;
@@ -117,6 +132,13 @@ void* kmalloc(size_t size)
 	return (void*) ((uint32_t) alloc + sizeof(alloc_t));
 }
 
+/* Used to return page aligned memory. */
+/*
+void kfree_p(void *page_mem)
+{
+	
+}
+*/
 
 void kfree(void *mem)
 {
@@ -124,6 +146,5 @@ void kfree(void *mem)
 	memory_used -= alloc->size + sizeof(alloc_t);
 	alloc->status = 0;
 }
-
 
 

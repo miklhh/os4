@@ -26,9 +26,9 @@ void keyboard_init()
 	keybuffer = (char*) kmalloc(256);
 	memset(keybuffer, 0, 256);
 	set_int(
-		0x21, 						// 0x21, IRQ-1.
-		(uint32_t) &keyboard_irq_wrapper,		// Wrapper function.
-		IDT_32BIT_INTERRUPT_GATE | IDT_PRESENT);	// Type attributes.
+		0x21,                                       // 0x21, IRQ-1.
+		(uint32_t) &keyboard_irq_wrapper,           // Wrapper function.
+		IDT_32BIT_INTERRUPT_GATE | IDT_PRESENT);    // Type attributes.
 	kbd_enabled = 1;
 	printf("Keyboard initialization done.\n");
 }
@@ -42,7 +42,7 @@ void keyboard_read_key()
 {
 	last_key = 0;
 
-	/* Test if we are allowed to read from the PS/2 controller, ie test the PS/2 output 
+	/* Test if we are allowed to read from the PS/2 controller, ie test the PS/2 output
 	 * buffer status. Bit zero (0x01) is the output buffer status bit in the status
 	 * register (located at I/O port 0x64.*/
 	if (inb(0x64) & 0x01)
@@ -51,6 +51,7 @@ void keyboard_read_key()
 	}
 }
 
+/* Function for getting the latest pressed key. */
 char keyboard_get_key()
 {
 	char c = 0;
@@ -75,12 +76,13 @@ static char* _num		= "1234567890";
 
 char keyboard_to_ascii(uint8_t key)
 {
-	if (key == 0x1C) 		return '\n';
-	if (key == 0x39) 		return ' ';
-	if (key == 0x0E) 		return '\r';
-	if (key == POINT_RELEASED) 	return '.';
-	if (key == SLASH_RELEASED) 	return '/';
-	if (key == ZERO_PRESSED) 	return '0';
+	if (key == 0x1C)            return '\n';
+	if (key == 0x39)            return ' ';
+	if (key == 0x0E)            return '\r';
+	if (key == POINT_RELEASED)  return '.';
+	if (key == SLASH_RELEASED)  return '/';
+	if (key == ZERO_PRESSED)    return '0';
+
 	if (key >= ONE_PRESSED && key <= NINE_PRESSED)
 		return _num[key - ONE_PRESSED];
 

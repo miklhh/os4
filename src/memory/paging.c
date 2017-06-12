@@ -49,8 +49,8 @@ void paging_init()
 		page_directory[i] = PAGE_DIR_READ_WRITE_BIT;
 	}
 
-	/* Create a page table and */
-	for (uint16_t i = 0; i < 1024; i++)
+	/* Page the first four mebibytes of memory the their corresponding address. */
+	for (uint32_t i = 0; i < 1024; i++)
 	{
 		test_page_table[i] = 	(i * 0x1000) 			| 
 					PAGE_TABLE_PRESENT_BIT 		|

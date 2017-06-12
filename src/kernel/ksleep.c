@@ -5,11 +5,13 @@
 
 #include <stdint.h>
 #include <kernel/pit.h>
-#include <system/sleep.h>
+#include <kernel/ksleep.h>
 
 extern volatile uint32_t __sys_tick;
 
-void sleep(uint32_t time_ms)
+/* This function requieres ring 0 priviliges. Otherwise it will throw a general
+ * protection fault. */
+void ksleep(uint32_t time_ms)
 {
 	/* The tick rate is 1000Hz. */
 	uint32_t tick = __sys_tick;

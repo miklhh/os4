@@ -14,7 +14,7 @@
 #include <kernel/pic.h>
 #include <kernel/exceptions.h>
 #include <kernel/task.h>
-#include <system/sleep.h>
+#include <kernel/ksleep.h>
 #include <string.h>
 
 extern uint32_t __kernel_start;
@@ -48,6 +48,7 @@ void kernel_main(void)
 
 	// Test the labels.
 	printf("Kernel start: %h, and kernel end: %h\n", &__kernel_start, &__kernel_end);
+    ksleep(5000);
 
 
 	// Initialize keyboard driver.
