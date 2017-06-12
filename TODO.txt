@@ -1,4 +1,5 @@
-1. 	- Setup a SYSCALL interface.
+1. 	- Fix that stupid CPUID macro..
+    - Setup a SYSCALL interface.
 	- Fix multitasking.
 	- Log all the interrupt handlers.
 	- Keyboard driver needs more support.

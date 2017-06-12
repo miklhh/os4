@@ -51,7 +51,7 @@ libs:
 	cd libc && $(MAKE) libk
 
 os: $(LINKFILES) $(CRTBEGIN_OBJ) $(CRTEND_OBJ) $(CRTI_OBJ) $(CRTN_OBJ)
-	$(LINKER)	-o $(BUILDPATH)/os.bin 		$(OBJ_LINK_ORDER)
+	$(LINKER)	-o $(BUILDPATH)/sysroot/boot/os.bin 		$(OBJ_LINK_ORDER)
 
 iso:
 	@echo "I am not ready for this yet..."
@@ -59,6 +59,5 @@ iso:
 clean:
 	-rm -rf $(SYSROOT)/usr		# Remove all the sysroot files.
 	-rm -rf $(OBJOUTPATH)/*.o	# Remove all the object files.
-	-rm $(BUILDPATH)/os.bin
-	-rm $(BUILDPATH)/os.iso
+	-rm $(BUILDPATH)/sysroot/boot/os.bin
 

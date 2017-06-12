@@ -15,6 +15,7 @@
 #include <kernel/exceptions.h>
 #include <kernel/task.h>
 #include <kernel/ksleep.h>
+#include <system/cpuid.h>
 #include <string.h>
 
 extern uint32_t __kernel_start;
@@ -46,13 +47,25 @@ void kernel_main(void)
 	// Initialze PIT.
 	pit_init();
 
-	// Test the labels.
+	// Print kernel start and kernel end.
 	printf("Kernel start: %h, and kernel end: %h\n", &__kernel_start, &__kernel_end);
-    ksleep(5000);
-
 
 	// Initialize keyboard driver.
 	keyboard_init();
+
+    // Test if the CPUID instructions works.
+    if (test_cpuid())
+    {
+        printf("CPUID-instruction available.\n");
+        uint32_t a, b, c, d;
+        __cpuid(0, a, b, c, d);
+        printf("EAX: %h\nEBX: %h\nECX: %h\nEDX: %h\n", a, b, c, d);
+        print_vendor_label();
+    }
+    else
+    {
+        printf("CPUID-instriction NOT availabe.\n");
+    }
 
 
 	/* ------------------------------------------------ */
