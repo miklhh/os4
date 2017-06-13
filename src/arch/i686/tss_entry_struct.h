@@ -38,4 +38,6 @@ struct tss_entry_struct
 
 } __attribute((packed));
 
+typedef struct tss_entry_struct tss_entry_t;
+
 #endif

@@ -8,13 +8,13 @@
 
 #include <stdint.h>
 
-/* Macros */
-#define IDT_32BIT_INTERRUPT_GATE	0xE
-#define IDT_32BIT_TRAP_GATE		0xF
-#define IDT_32BIT_TASK_GATE		0x5
-#define IDT_STORAGE_SEGMENT		0x20
-#define IDT_DPL_3			0x60
-#define IDT_PRESENT			0x80
+/* Interrupt-setting macros. */
+#define IDT_32BIT_INTERRUPT_GATE    0xE
+#define IDT_32BIT_TRAP_GATE         0xF
+#define IDT_32BIT_TASK_GATE         0x5
+#define IDT_STORAGE_SEGMENT         0x20
+#define IDT_DPL_3                   0x60
+#define IDT_PRESENT                 0x80
 
 /* Functions. */
 void idt_init();

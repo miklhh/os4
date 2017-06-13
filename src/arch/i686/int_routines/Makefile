@@ -23,17 +23,19 @@ headers:
 
 objfiles:
 	$(ASSEMBLE) -o $(OBJOUTPATH)/__idt_default_handler.arch.o \
-		    __idt_default_handler.asm
+	    __idt_default_handler.asm
 	$(ASSEMBLE) -o $(OBJOUTPATH)/interrupt_test_handler_wrapper.arch.o \
-		    interrupt_test_handler.asm
+	    interrupt_test_handler.asm
 	$(ASSEMBLE) -o $(OBJOUTPATH)/_set_idtr.arch.o \
-		    _set_idtr.asm
+	    _set_idtr.asm
 	$(ASSEMBLE) -o $(OBJOUTPATH)/pit_irq_wrapper.arch.o \
-		    pit_irq_wrapper.asm
+	    pit_irq_wrapper.asm
 	$(ASSEMBLE) -o $(OBJOUTPATH)/keyboard_irq_wrapper.arch.o \
-		    keyboard_irq_wrapper.asm
+	    keyboard_irq_wrapper.asm
 	$(ASSEMBLE) -o $(OBJOUTPATH)/exception_wrappers.arch.o \
-		    exception_wrappers.asm
+		exception_wrappers.asm
+	$(ASSEMBLE) -o $(OBJOUTPATH)/syscall_wapper.arch.o \
+		syscall_wrapper.asm
 
 	$(COMPILE) -o $(OBJOUTPATH)/interrupt_test_handler.arch.o \
 		   -c interrupt_test_handler.c

@@ -37,15 +37,15 @@ void idt_init()
 	for (uint8_t i = 0; i < 255; i++)
 	{
 		idt_register_interrupt(
-			i, 						// Interrupt vector
-			(uint32_t) &__idt_default_handler, 		// Callback func.
-			IDT_PRESENT | IDT_32BIT_INTERRUPT_GATE);	// Type Attributes.
+			i,                                          // Interrupt vector
+			(uint32_t) &__idt_default_handler,          // Callback func.
+			IDT_PRESENT | IDT_32BIT_INTERRUPT_GATE);    // Type Attributes.
 	}
 	/* Register a test interrupt */
 	idt_register_interrupt(
-		0x2f,						// Interrupt vector.
-		(uint32_t) &interrupt_test_handler,		// Callback function.
-		IDT_PRESENT | IDT_32BIT_INTERRUPT_GATE);	// Type attributes.
+		0x2f,                                       // Interrupt vector.
+		(uint32_t) &interrupt_test_handler,         // Callback function.
+		IDT_PRESENT | IDT_32BIT_INTERRUPT_GATE);    // Type attributes.
 	
 	
 	/* Register the IDT */
@@ -65,7 +65,7 @@ void idt_init()
 
 }
 
-/* Set an interrupt (interrupts must be initialized). */
+/* Set an interrupt (interrupts must first be initialized). */
 void set_int(uint8_t i, uint32_t callback, uint8_t type_attribute)
 {
 	if (!idt_initialized)

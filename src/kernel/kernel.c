@@ -12,6 +12,7 @@
 #include <kernel/idt.h>
 #include <kernel/pit.h>
 #include <kernel/pic.h>
+#include <kernel/syscall.h>
 #include <kernel/exceptions.h>
 #include <kernel/task.h>
 #include <kernel/ksleep.h>
@@ -20,11 +21,12 @@
 
 extern uint32_t __kernel_start;
 extern uint32_t __kernel_end;
+extern uint32_t interrupt_stack_top;
 
 void kernel_main(void)
 {
 	// Initialize terminal, for being able to write.
-	terminal_initialize();
+	terminal_init();
 
 	// Initialize the GDT.
 	gdt_init();
@@ -47,6 +49,9 @@ void kernel_main(void)
 	// Initialze PIT.
 	pit_init();
 
+    // Initialize system calls.
+    syscall_init();
+
 	// Print kernel start and kernel end.
 	printf("Kernel start: %h, and kernel end: %h\n", &__kernel_start, &__kernel_end);
 
@@ -61,6 +66,7 @@ void kernel_main(void)
         __cpuid(0, a, b, c, d);
         printf("EAX: %h\nEBX: %h\nECX: %h\nEDX: %h\n", a, b, c, d);
         print_vendor_label();
+        printf("\n");
     }
     else
     {
@@ -69,8 +75,18 @@ void kernel_main(void)
 
 
 	/* ------------------------------------------------ */
-	set_kernel_stack();
+	set_kernel_stack((uint32_t) &interrupt_stack_top);
 	switch_to_user_mode();
+
+    // Test a systemcall
+    asm volatile(
+        "movl $1234, %%eax  \n"
+        "int $0x80          \n"
+        :
+        :
+        : "eax");
+
+
 	/* Testing keyboard. */
 	while (1)
 	{

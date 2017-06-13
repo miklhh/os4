@@ -18,7 +18,7 @@ static uint16_t* terminal_buffer;
 
 
 /* Set the current position of the curser */
-static inline void set_cursor_at(size_t x, size_t y)
+static void set_cursor_at(size_t x, size_t y)
 {
 	/* TODO: Like everything else here, but even more importantly in this 
 	 * functioni, since this functino uses io-ports, make sure this 
@@ -40,7 +40,7 @@ static inline void set_cursor_at(size_t x, size_t y)
 }
 
 /* Initialize the tty */
-void terminal_initialize() 
+void terminal_init() 
 {
 	/* Set cursorposition on initialization */
 	cursor.x = 0;
