@@ -34,12 +34,14 @@ void exceptions_init()
 		EXCEPTION_FLAGS);
 }
 
+// Divide by zero exception.
 void divide_by_zero_error()
 {
 	printf("ERROR, DIVEDE-BY-ZERO ERROR, HALTING.");
 	asm volatile("cli; hlt;");
 }
 
+// General protection fault.
 void general_protection_fault()
 {
 	uint32_t error_code = 0;
@@ -47,14 +49,15 @@ void general_protection_fault()
 	asm volatile ("			\
 		movl	(%%esp), %%eax;	\
 		movl	%%eax, %0;"
-		:"=r"(error_code)	// Output.
-		:			// Input.
-		:"%eax");		// Clobbered registers.
+		:"=r"(error_code)       // Output.
+		:                       // Input.
+		:"%eax");	            // Clobbered registers.
 	printf("%h", error_code);
 
 	asm volatile("cli; hlt;");
 }
 
+// Page fault.
 void page_fault()
 {
 	printf("ERROR, PAGE FAULT, HALTING.");

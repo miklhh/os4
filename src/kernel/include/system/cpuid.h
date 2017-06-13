@@ -10,8 +10,8 @@
 #include <stdio.h>
 
 /* Macro for using the cpuid instruction. */
-#define __cpuid(level, a, b, c, d)                                \
-    asm volatile (  "cpuid\n"                                    \
+#define __cpuid(level, a, b, c, d)                              \
+    asm volatile (  "cpuid \n"                                  \
                     : "=a" (a), "=b" (b), "=c" (c), "=d" (d)    \
                     : "0" (level))
 
@@ -25,15 +25,15 @@ static inline void print_vendor_label()
     __cpuid(0, eax, ebx, ecx, edx);
     for (uint8_t i = 0; i < 4; i++)
     {
-        printf("%c", (char) (ebx >> (i * 4) & 0x000000FF));
+        printf("%c", (char) (ebx >> (i * 8) & 0x000000FF));
     }
     for (uint8_t i = 0; i < 4; i++)
     {
-        printf("%c", (char) (edx >> (i * 4)));
+        printf("%c", (char) (edx >> (i * 8)));
     }
     for (uint8_t i = 0; i < 4; i++)
     {
-        printf("%c", (char) (ecx >> (i * 4)));
+        printf("%c", (char) (ecx >> (i * 8)));
     }
 }
 

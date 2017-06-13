@@ -47,7 +47,7 @@ void mm_init(uint32_t kernel_end)
 }
 
 /* Kernel malloc, page alligned. There is, for the record no way of
- * freeing this kind of memory. Please don not try to use the standard
+ * freeing this kind of memory. Please do not try to use the standard
  * kfree to free this memory.*/
 void* kmalloc_p(size_t size, uint32_t* phys)
 {
@@ -79,16 +79,16 @@ void* kmalloc(size_t size)
 	uint8_t* mem = (uint8_t*) heap_start;
 	while((uint32_t) mem < last_alloc)
 	{
-		alloc_t *a = (alloc_t*) mem;	// Memory pointer.	
-		if (!a->size) goto nalloc;	// If size = 0, memory is full.
+		alloc_t *a = (alloc_t*) mem;    // Memory pointer.	
+		if (!a->size) goto nalloc;      // If size = 0, memory is full.
 
 		/* If the alloc is taken (status == 1), add it's size of to search-
 		 * pointer and keep continue with next iteration. */
 		if (a->status)
 		{
-			mem += a->size;		  // Add the size wher next alloc_t is.
-			mem += sizeof(alloc_t);	  // Add the size of an alloc_t.
-			mem += 4;		  // Add another four bytes.
+			mem += a->size;             // Add the size wher next alloc_t is.
+			mem += sizeof(alloc_t);     // Add the size of an alloc_t.
+			mem += 4;                   // Add another four bytes.
 			continue;
 		}
 
@@ -120,12 +120,12 @@ void* kmalloc(size_t size)
 		panic("Kernel panic, cannot allocate more memory.");
 	}
 	
-	alloc_t* alloc  = (alloc_t*)last_alloc;	// Allocate memory by the last alloc.
-	alloc->status 	= 1;			// Mark it as active.
-	alloc->size 	= size;			// Set it's size.
-	last_alloc += size;			// Move the 'last_alloc'.
-	last_alloc += sizeof(alloc_t);		// Move the 'last_alloc'.
-	last_alloc += 4;			// Move the 'last_alloc'.
+	alloc_t* alloc  = (alloc_t*)last_alloc;	    // Allocate memory by the last alloc.
+	alloc->status 	= 1;                        // Mark it as active.
+	alloc->size 	= size;                     // Set it's size.
+	last_alloc += size;                         // Move the 'last_alloc'.
+	last_alloc += sizeof(alloc_t);              // Move the 'last_alloc'.
+	last_alloc += 4;                            // Move the 'last_alloc'.
 	
 	memory_used += size + sizeof(alloc_t) + 4;
 	memset((char*) ((uint32_t) alloc + sizeof(alloc_t)), 0, size);
