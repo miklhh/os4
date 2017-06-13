@@ -5,9 +5,8 @@
 
 global load_page_directory
 load_page_directory:
-	push 	ebp
-	mov	ebp, esp
-	mov	eax, [esp+8]	; Parameter address.
-	mov	cr3, eax
-	pop 	ebp
+	push    eax
+	mov     eax, [esp+8]    ; Parameter address.
+	mov     cr3, eax
+	pop     eax
 	ret
