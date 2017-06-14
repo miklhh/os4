@@ -80,11 +80,18 @@ void kernel_main(void)
 
     // Test a systemcall
     asm volatile(
-        "movl $1234, %%eax  \n"
+        "movl $0, %%eax     \n"
         "int $0x80          \n"
         :
         :
         : "eax");
+    uint32_t returnvalue = 0;
+    asm volatile(
+        "movl %%eax, %0"
+        : "=r"(returnvalue)
+        :
+        :);
+    printf("Return value: %h", returnvalue);
 
 
 	/* Testing keyboard. */

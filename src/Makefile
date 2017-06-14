@@ -10,10 +10,12 @@ OBJOUTPATH = $(BUILDPATH)/objfiles
 
 ###Files:
 #Linkfiles, excluding crti.o, crtn.o, crtbegin.o and crtend.o
-LINKFILES = $(wildcard $(OBJOUTPATH)/*.kernel.o) \
-	    $(wildcard $(OBJOUTPATH)/*.driver.o) \
-	    $(wildcard $(OBJOUTPATH)/*.arch.o) \
-	    $(wildcard $(OBJOUTPATH)/*.memory.o)
+LINKFILES =										\
+		$(wildcard $(OBJOUTPATH)/*.kernel.o)	\
+	    $(wildcard $(OBJOUTPATH)/*.driver.o)	\
+	    $(wildcard $(OBJOUTPATH)/*.arch.o)		\
+	    $(wildcard $(OBJOUTPATH)/*.memory.o)	\
+		$(wildcard $(OBJOUTPATH)/*.syscall.o)
 
 #CRT-linkfiles:
 CRTI_OBJ = $(OBJOUTPATH)/crti.crtx.o
