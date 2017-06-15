@@ -1,21 +1,33 @@
 --- Version information ---
 
+-- Version 1.3.0 2017-06-15
+ - Release-name changed from 'Alpha' to 'Version' to indicate that the OS is 
+   no-where near completed.
+ - Systemcall interface added and briefly tested.
+ - Seperated the libk library into the two new libc and libk.
+ - Added MIT-license to the project.
+ 
+
 -- Alpha 1.2.2
  - Method for switching to usermode added.
- - Start of a new paging system.
+ - Started working on a new paging system.
 Also some additional small changes to the code has been done.
+
 
 -- Alpha 1.2.1
  - Super basic keyboard driver added.
 
+
 -- Alpha 1.2.0
- - Heap allocation function 'malloc' and 'free' added.
+ - Heap allocation function 'kmalloc' and 'kfree' added.
 Heap allocation for the kernel has finally been added, and some test with it has been done.
 It seems to behave normaly.
 
+
 -- Alpha 1.1.1 2017-02-20
  - Fixed the sleep function.
-With the sleep function fixed, the os behaves the same on VirtualBox aswell as QEMU.
+With the sleep function fixed, the os behaves the same on VirtualBox as on QEMU.
+
 
 -- Alpha 1.1.0 2017-02-19
  - Code for interrupts added.

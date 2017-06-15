@@ -62,4 +62,5 @@ clean:
 	-rm -rf $(SYSROOT)/usr		# Remove all the sysroot files.
 	-rm -rf $(OBJOUTPATH)/*.o	# Remove all the object files.
 	-rm $(BUILDPATH)/sysroot/boot/os.bin
+	-rm $(BUILDPATH)/../os.iso
 

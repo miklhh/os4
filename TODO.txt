@@ -5,16 +5,6 @@
 	- Start looking into multitasking.
 	- Start looking into 
 
-2.	- Put my name (author) in every sourcefile.
-	- Think of a new OS name?
+2.  - Think of a new OS name?
 	- Remove -g flag on release (so that debug symbols wont be avaliable in binary).
 	- Implement a kernel stack smash protector.
-
-Good to know:
-	- It's not very clever to try interrupts before the GDT has been setup, since
-	  every interrupt selects a descriptor from the GDT. I found this out the hard way...
-	  
-
-REMEMBER:
-The -MD flag has been removed from comilation in hope of not creating those
-annoying .d files. Does it still work?

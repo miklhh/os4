@@ -5,7 +5,7 @@ ENTRY(_start)
 SECTIONS
 {
 	/* Load kernel at 1MiB into memory. */
-	. = 1M;
+	. = 0x00100000;
 	
 	/* Label to find the kernel start. */
 	__kernel_start = .;
@@ -19,18 +19,21 @@ SECTIONS
 
 	/* Read only data. */
 	.rodata BLOCK(4K) : ALIGN(4K)
+
 	{
 		*(.rodata)
 	}
 
 	/* Read and write data. */
 	.data BLOCK(4K) : ALIGN(4K)
+
 	{
 		*(.data)
 	}
 
 	/* Read and write data (uninitialized) plus stack */
 	.bss BLOCK(4K) : ALIGN(4K)
+
 	{
 		*(COMMON)
 		*(.bss)

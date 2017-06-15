@@ -57,6 +57,13 @@ void paging_init()
                     PAGE_TABLE_PRESENT_BIT      |
                     PAGE_TABLE_READ_WRITE_BIT   |
                     PAGE_TABLE_USER_BIT;
+        /*
+        test_page_table[i]=
+            (i * 0xC0000000)                    |
+            PAGE_TABLE_PRESENT_BIT              |
+            PAGE_TABLE_READ_WRITE_BIT           |
+            PAGE_TABLE_USER_BIT;
+        */
 	}
 
 	/* Add the page table to the page directory. */

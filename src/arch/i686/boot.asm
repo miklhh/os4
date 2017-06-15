@@ -7,12 +7,17 @@
 ; For documentation about the multibootheader:
 ; https://www.gnu.org/software/grub/manual/multiboot/multiboot.html
 ; --- Multiboot header ---
-MBALIGN	equ 1<<0		; Align the master boot record with pages.
-MEMINFO	equ 1<<1		; Tell GRUB that we want memory information.
-MAGIC	equ 0x1BADB002		; The magic GRUB boot number.
-FLAGS	equ MBALIGN | MEMINFO	; Flags for the multoboot header.
+MBALIGN equ 1<<0                ; Align the master boot record with pages.
+MEMINFO equ 1<<1                ; Tell GRUB that we want memory information.
+MAGIC   equ 0x1BADB002          ; The magic GRUB boot number.
+FLAGS   equ MBALIGN | MEMINFO   ; Flags for the multoboot header.
 
-; -- Start of multiboot header
+
+; Kernel virtual base address.
+KERNEL_VIRTUAL_BASE equ 0xC0000000
+KERNEL_PAGE_NUMBER  equ (KERNEL_VIRTUAL_BASE >> 22)
+
+; -- Start of multiboot header.
 section .grubheader
 align 4
 	dd MAGIC
@@ -22,14 +27,16 @@ align 4
 
 ; -- Stack after booting.
 section .bss
-align 	16
-interrupt_stack_bottom:
-resb	32768
+align 16
 global interrupt_stack_top
+global kernel_stack_top
+
+interrupt_stack_bottom:
+    resb	32768
 interrupt_stack_top:
-resb	4
+    resb	16
 kernel_stack_bottom:
-resb 	32768
+    resb 	32768
 kernel_stack_top:
 
 
