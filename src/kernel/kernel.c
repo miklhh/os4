@@ -42,7 +42,7 @@ void kernel_main(void)
 	mm_init(&__kernel_end);
 	
 	// Initialize the paging.
-	paging_init();
+	//paging_init();
 
 	// Initialse the PIC
 	pic_init();

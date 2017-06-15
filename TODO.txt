@@ -1,4 +1,4 @@
-1.  - Setup a SYSCALL interface.
+1.  - Implement higher half kernel.
 	- Fix multitasking.
 	- Log all the interrupt handlers.
 	- Keyboard driver needs more support.
@@ -8,3 +8,4 @@
 2.  - Think of a new OS name?
 	- Remove -g flag on release (so that debug symbols wont be avaliable in binary).
 	- Implement a kernel stack smash protector.
+    - Add the requierments.txt to the README.md. Remove requierments.txt

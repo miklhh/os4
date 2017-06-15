@@ -11,29 +11,26 @@ SECTIONS
 	__kernel_start = .;
 
 	/* The grubheader and the text-section. */
-	.text BLOCK(4K) : ALIGN(4K)
+	.text :
 	{
 		*(.grubheader)
 		*(.text)
 	}
 
 	/* Read only data. */
-	.rodata BLOCK(4K) : ALIGN(4K)
-
+	.rodata :
 	{
 		*(.rodata)
 	}
 
 	/* Read and write data. */
-	.data BLOCK(4K) : ALIGN(4K)
-
+	.data ALIGN(0x1000) :
 	{
 		*(.data)
 	}
 
 	/* Read and write data (uninitialized) plus stack */
-	.bss BLOCK(4K) : ALIGN(4K)
-
+	.bss :
 	{
 		*(COMMON)
 		*(.bss)

@@ -1,5 +1,5 @@
 # OS4
-Hobbyist operating system.
+Hobbyist operating system written for the x86 architecture.
 
 ## Authors
 * **Mikael Henriksson** - *Code and testing* - [https://github.com/miklhh](https://github.com/miklhh)
