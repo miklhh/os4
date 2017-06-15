@@ -23,10 +23,10 @@ static void set_cursor_at(size_t x, size_t y)
 	/* TODO: Like everything else here, but even more importantly in this 
 	 * functioni, since this functino uses io-ports, make sure this 
 	 * function is only used in VGAs TEXT MODE! */
-	const uint16_t ADDR_REG_PORT = 0x3d4;	// VGA Address register port
-	const uint16_t DATA_REG_PORT = 0x3d5;	// VGA Data register port.
-	const uint8_t CURSOR_LOC_H_REG = 0x0e;	// Cursor location high register.
-	const uint8_t CURSOR_LOC_L_REG = 0x0f;	// Cursor location low register.
+	const uint16_t ADDR_REG_PORT = 0x3d4;   // VGA Address register port
+	const uint16_t DATA_REG_PORT = 0x3d5;   // VGA Data register port.
+	const uint8_t CURSOR_LOC_H_REG = 0x0e;  // Cursor location high register.
+	const uint8_t CURSOR_LOC_L_REG = 0x0f;  // Cursor location low register.
 
 	uint16_t cursor_loc = VGA_WIDTH * y + x;
 	uint8_t cursor_loc_h = (uint8_t) (cursor_loc >> 8);
@@ -66,7 +66,7 @@ void terminal_setcolor(uint8_t color)
 	terminal_color = color;
 }
 
-void terminal_putentryat(unsigned char c, uint8_t color, size_t x, size_t y) 
+static void terminal_putentryat(unsigned char c, uint8_t color, size_t x, size_t y) 
 {
 	const size_t index = y * VGA_WIDTH + x;
 	terminal_buffer[index] = vga_entry(c, color);
@@ -125,10 +125,10 @@ void terminal_scroll(size_t scrolltimes)
 			unsigned char character = terminal_buffer[row * VGA_WIDTH + col];
 			terminal_putentryat
 				(
-					character, 		// Character.
-					terminal_color, 	// Color.
-					col, 			// Column.
-					row - scrolltimes	// Row.
+					character,          // Character.
+					terminal_color,     // Color.
+					col,                // Column.
+					row - scrolltimes   // Row.
 				);
 		}
 	}
@@ -140,10 +140,10 @@ void terminal_scroll(size_t scrolltimes)
 		{
 			terminal_putentryat
 				(
-					' ',		// Character.
-					terminal_color,	// Color.
-					col,		// Column.	
-					row		// Row.
+					' ',            // Character.
+					terminal_color, // Color.
+					col,            // Column.	
+					row             // Row.
 				);
 		}
 	}

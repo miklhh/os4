@@ -3,11 +3,11 @@
  * Author Mikael Henriksson, miklhh
  */
 
-#include <stdio.h>
+#include <kstdio.h>
 
 void panic(char* string)
 {
-	printf(string);
+	kprintf(string);
 	while (1)
 	{
 		asm volatile("cli");

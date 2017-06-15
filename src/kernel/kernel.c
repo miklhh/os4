@@ -5,6 +5,7 @@
 
 #include <memory/paging.h>
 #include <memory/memory.h>
+#include <kstdio.h>
 #include <stdio.h>
 #include <driver/tty.h>
 #include <driver/keyboard.h>
@@ -53,7 +54,7 @@ void kernel_main(void)
     syscall_init();
 
 	// Print kernel start and kernel end.
-	printf("Kernel start: %h, and kernel end: %h\n", &__kernel_start, &__kernel_end);
+	kprintf("Kernel start: %x, and kernel end: %x\n", &__kernel_start, &__kernel_end);
 
 	// Initialize keyboard driver.
 	keyboard_init();
@@ -61,16 +62,16 @@ void kernel_main(void)
     // Test if the CPUID instructions works.
     if (test_cpuid())
     {
-        printf("CPUID-instruction available.\n");
+        kprintf("CPUID-instruction available.\n");
         uint32_t a, b, c, d;
         __cpuid(0, a, b, c, d);
-        printf("EAX: %h\nEBX: %h\nECX: %h\nEDX: %h\n", a, b, c, d);
+        kprintf("EAX: %h\nEBX: %h\nECX: %h\nEDX: %h\n", a, b, c, d);
         print_vendor_label();
-        printf("\n");
+        kprintf("\n");
     }
     else
     {
-        printf("CPUID-instriction NOT availabe.\n");
+        kprintf("CPUID-instriction NOT availabe.\n");
     }
 
 
@@ -91,8 +92,10 @@ void kernel_main(void)
         : "=r"(returnvalue)
         :
         :);
-    printf("Return value: %h", returnvalue);
+    kprintf("Return value: %h\n", returnvalue);
 
+    /* Test user-land printf. */
+    printf("Userland printf printing!\n");
 
 	/* Testing keyboard. */
 	while (1)

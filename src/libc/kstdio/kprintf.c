@@ -1,5 +1,5 @@
 /*
- * Part of OS4, printf.c
+ * Part of OS4, kprintf.c
  * Author: Mikael Henriksson, miklhh
  */
 
@@ -7,7 +7,7 @@
 #include <limits.h>
 #include <stdbool.h>
 #include <stdarg.h>
-#include <stdio.h>
+#include <kstdio.h>
 #include <string.h>
 #include <stdint.h>
 
@@ -30,7 +30,7 @@ static bool print(const char* data, size_t length)
 	const unsigned char* bytes = (const unsigned char*) data;
 	for (size_t i = 0; i < length; i++)
     {
-		if (putchar(bytes[i]) == EOF)
+		if (kputchar(bytes[i]) == EOF)
 			return false;
     }
 	return true;
@@ -62,7 +62,7 @@ static char* hexconverter (uint32_t num)
 
 
 /* Print formated string. */
-int printf(const char* restrict format, ...) 
+int kprintf(const char* restrict format, ...) 
 {
 	va_list parameters;
 	va_start(parameters, format);
@@ -147,7 +147,7 @@ int printf(const char* restrict format, ...)
 				// TODO: Set errno to EOVERFLOW.
 				return -1;
 			}
-			if (!printf(string))
+			if (!kprintf(string))
             {
 				return -1;
             }

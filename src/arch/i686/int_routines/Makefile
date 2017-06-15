@@ -26,8 +26,6 @@ objfiles:
 	    __idt_default_handler.asm
 	$(ASSEMBLE) -o $(OBJOUTPATH)/interrupt_test_handler_wrapper.arch.o \
 	    interrupt_test_handler.asm
-	$(ASSEMBLE) -o $(OBJOUTPATH)/_set_idtr.arch.o \
-	    _set_idtr.asm
 	$(ASSEMBLE) -o $(OBJOUTPATH)/pit_irq_wrapper.arch.o \
 	    pit_irq_wrapper.asm
 	$(ASSEMBLE) -o $(OBJOUTPATH)/keyboard_irq_wrapper.arch.o \

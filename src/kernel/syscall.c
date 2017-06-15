@@ -15,6 +15,7 @@
 
 /* The syscall entries */
 extern uint32_t sys_0_default_syscall();
+extern uint32_t sys_1_terminal_putchar();
 
 
 /* Function wrapper for the systemcall. */
@@ -31,18 +32,24 @@ void syscall_init()
         0x80, 
         (uint32_t) &syscall_wrapper,
         SYSCALL_INTERRUPT_FLAGS);
+    
+    /* Set all vectors to default syscall */
+    for (uint32_t i = 0; i < 256; i++)
+    {
+        syscall_entries[i] = sys_0_default_syscall;
+    }
 
-    syscall_entries[0] = sys_0_default_syscall;
-
+    /* Put acctual syscalls into the vector. */
+    syscall_entries[1] = sys_1_terminal_putchar;
 }
 
 
 void syscall()
 {
     /* Aquire the syscall. */
-    uint32_t call = 0;
+    uint16_t call = 0;
     asm volatile(
-            "movl %%eax, %0"
+            "movw %%ax, %0"
             : "=r" (call)           // Output
             :                       // Input
             :               );      // Clobbered registers.

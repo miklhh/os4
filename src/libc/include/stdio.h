@@ -1,3 +1,8 @@
+/*
+ * Part of OS4, stdio.h
+ * Author: Mikael Henriksson, miklhh
+ */
+
 #ifndef _STDIO_H
 #define _STDIO_H
 
@@ -15,14 +20,14 @@
 int printf(const char* restrict format, ...);
 
 
-/*** Put character (int):
+/*** Put character:
  * Function for writing a character (as an integer) to the stdout. Returns the
  * integer written on succes, or EOF (-1) if it fails.
  * ---------------------------------------------------------------------------*/
 int putchar(int character);
 
 
-/*** Put character (char):
+/*** Put character:
  * Function for writing a string (without NULL character) to the stdout. 
  * Returns a positive integer on succes, or EOF (-1) if it fails.
  * ---------------------------------------------------------------------------*/

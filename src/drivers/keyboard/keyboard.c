@@ -9,20 +9,23 @@
 #include <kernel/io.h>
 #include <kernel/pic.h>
 #include <driver/keyboard.h>
-#include <stdio.h>
+#include <kstdio.h>
 #include <string.h>
 #include <driver/keycode.h>
 
-uint8_t	 last_key 	= 0;
-char*	 keybuffer 	= 0;
-uint16_t key_loc	= 0;
-uint8_t	 kbd_enabled	= 0;
+
+static uint8_t  last_key               = 0;
+static char*    keybuffer              = 0;
+static uint16_t current_buffer_size    = 0;
+static uint8_t  kbd_enabled            = 0;
+
 
 extern void keyboard_irq_wrapper();
 
+
 void keyboard_init()
 {
-	printf("Initializing PS/2-Keyboard routines.\n");
+	kprintf("Initializing PS/2-Keyboard routines.\n");
 	keybuffer = (char*) kmalloc(256);
 	memset(keybuffer, 0, 256);
 	set_int(
@@ -30,49 +33,56 @@ void keyboard_init()
 		(uint32_t) &keyboard_irq_wrapper,           // Wrapper function.
 		IDT_32BIT_INTERRUPT_GATE | IDT_PRESENT);    // Type attributes.
 	kbd_enabled = 1;
-	printf("Keyboard initialization done.\n");
+	kprintf("Keyboard initialization done.\n");
 }
+
 
 uint8_t keyboard_enabled()
 {
 	return kbd_enabled;
 }
 
+
 void keyboard_read_key()
 {
-	last_key = 0;
-
 	/* Test if we are allowed to read from the PS/2 controller, ie test the PS/2 output
 	 * buffer status. Bit zero (0x01) is the output buffer status bit in the status
 	 * register (located at I/O port 0x64.*/
+	last_key = 0;
 	if (inb(0x64) & 0x01)
 	{
 		last_key = inb(0x60);
 	}
 }
 
+
 /* Function for getting the latest pressed key. */
 char keyboard_get_key()
 {
 	char c = 0;
-	if (key_loc == 0) 
+	if (current_buffer_size == 0) 
+    {
 		return c;
-
-	/* Set 'c' to the next key in the buffer, and roll the buffer (array) down. */
-	c = *keybuffer;
-	key_loc--;
-	for (uint8_t i = 0; i < 255; i++)
-	{
-		keybuffer[i] = keybuffer[i+1];
-	}
+    }
+    else
+    {
+	    /* Set 'c' to the next key in the buffer, and roll the buffer (array) 
+         * down. */
+        c = *keybuffer;
+        current_buffer_size--;
+        for (uint8_t i = 0; i < 255; i++)
+        {
+		    keybuffer[i] = keybuffer[i+1];
+	    }
 	
 	return c;
+    }
 }
 
-static char* _qwertyuiop 	= "qwertyuiop";
-static char* _asdfghjkl		= "asdfghjkl";
-static char* _zxcvbnm		= "zxcvbnm";
-static char* _num		= "1234567890";
+static char* _qwertyuiop    = "qwertyuiop";
+static char* _asdfghjkl     = "asdfghjkl";
+static char* _zxcvbnm       = "zxcvbnm";
+static char* _num           = "1234567890";
 
 char keyboard_to_ascii(uint8_t key)
 {
@@ -98,10 +108,11 @@ char keyboard_to_ascii(uint8_t key)
 	return (char) 0;
 }
 
+/* The function called everytime a keyboard interrupt orrurs. */
 void keyboard_irq()
 {
 	/* Load the keycode and convert it into ascii-code. Also send end of
 	 * interrupt (IRQ1) to the PIC */
-	keybuffer[key_loc++] = keyboard_to_ascii(inb(0x60));
+	keybuffer[current_buffer_size++] = keyboard_to_ascii(inb(0x60));
 	pic_send_eoi(1);
 }

@@ -25,6 +25,8 @@ headers:
 objfiles:
 	$(COMPILE) -o $(OBJOUTPATH)/sys_0_default_syscall.syscall.o	\
 		-c sys_0_default_syscall.c
+	$(COMPILE) -o $(OBJOUTPATH)/sys_1_terminal_putchar.syscall.o \
+		-c sys_1_terminal_putchar.c
 
 clean:
 	-rm -r $(SYSROOT)/usr/include/kernel

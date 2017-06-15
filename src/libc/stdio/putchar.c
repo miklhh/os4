@@ -4,13 +4,18 @@
 #include <driver/tty.h>
 #endif
 
+
+
 int putchar(int character)
 {
-#if defined(__is_libk)
-	char c = (char) character;
-	terminal_write(&c, sizeof(c));
-#else
-	// TODO: Impement stdio and make system call.
-#endif
-	return character;
+    char c = (char) character;
+    asm volatile(
+            "movb   %0, %%bl        \n"
+            "movw   $1, %%ax        \n"
+            "int    $0x80           \n"
+            :
+            : "r"(c)
+            : "%bl");
+
+    return character;
 }

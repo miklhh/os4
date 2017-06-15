@@ -3,11 +3,11 @@
  * Author: Mikael Henriksson
  */
 
-#include <stdio.h>
+#include <kstdio.h>
 #include <stdint.h>
 
 uint32_t sys_0_default_syscall()
 {
-    printf("Default syscall called. Did you do something wrong?\n");
+    kprintf("Default syscall called. Did you do something wrong?\n");
     return 0x1337;
 }

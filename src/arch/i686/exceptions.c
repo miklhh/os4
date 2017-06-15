@@ -5,7 +5,7 @@
 
 #include <kernel/exceptions.h>
 #include <kernel/idt.h>
-#include <stdio.h>
+#include <kstdio.h>
 
 extern void general_protection_fault_wrapper();
 extern void divide_by_zero_error_wrapper();
@@ -37,7 +37,7 @@ void exceptions_init()
 // Divide by zero exception.
 void divide_by_zero_error()
 {
-	printf("ERROR, DIVEDE-BY-ZERO ERROR, HALTING.");
+	kprintf("ERROR, DIVEDE-BY-ZERO ERROR, HALTING.");
 	asm volatile("cli; hlt;");
 }
 
@@ -45,14 +45,14 @@ void divide_by_zero_error()
 void general_protection_fault()
 {
 	uint32_t error_code = 0;
-	printf("ERROR, GENERAL PROTECTION FAULT, HALTING. ERROR CODE: ");
+	kprintf("ERROR, GENERAL PROTECTION FAULT, HALTING. ERROR CODE: ");
 	asm volatile ("			\
 		movl	(%%esp), %%eax;	\
 		movl	%%eax, %0;"
 		:"=r"(error_code)       // Output.
 		:                       // Input.
 		:"%eax");	            // Clobbered registers.
-	printf("%h", error_code);
+	kprintf("%h", error_code);
 
 	asm volatile("cli; hlt;");
 }
@@ -60,6 +60,6 @@ void general_protection_fault()
 // Page fault.
 void page_fault()
 {
-	printf("ERROR, PAGE FAULT, HALTING.");
+	kprintf("ERROR, PAGE FAULT, HALTING.");
 	asm volatile("cli; hlt");
 }

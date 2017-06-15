@@ -4,7 +4,7 @@
  */
 
 #include <memory/memory.h>
-#include <stdio.h>
+#include <kstdio.h>
 #include <kernel/panic.h>
 
 #define MAX_PAGE_DIRECTORY_ENTRIES 1024
@@ -41,7 +41,7 @@ void paging_init()
 		panic("Kernel panic: Could not 4k-align the Page-Directory.");
 	}
 
-	printf("Page-directory start location: %h\n", (uint32_t) page_directory);
+	kprintf("Page-directory start location: %h\n", (uint32_t) page_directory);
 
 	/* Set all the entries in the page directory to non-present. */
 	for (uint16_t i = 0; i < 1024; i++)
@@ -69,7 +69,7 @@ void paging_init()
 	/* Enable paging */
 	load_page_directory(page_directory);
 	enable_paging();
-	printf("Paging enabled.\n");
+	kprintf("Paging enabled.\n");
 
 }
 

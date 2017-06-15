@@ -25,7 +25,7 @@ CRTN_OBJ = $(OBJOUTPATH)/crtn.crtx.o
 
 #Link-list (please note the links inside of the crt-objects):
 OBJ_LINK_ORDER = $(CRTI_OBJ) $(CRTBEGIN_OBJ) $(LINKFILES) -nostdlib \
-		    -lk -lgcc $(CRTEND_OBJ) $(CRTN_OBJ)
+		    -lk -lc -lgcc $(CRTEND_OBJ) $(CRTN_OBJ)
 
 ###Build-options:
 CFLAGS = -ffreestanding -Wall -Wextra -O2 -g -std=gnu11
@@ -50,7 +50,7 @@ objfiles:
 	cd memory && $(MAKE) objfiles
 
 libs:
-	cd libc && $(MAKE) libk
+	cd libc && $(MAKE) libs
 
 os: $(LINKFILES) $(CRTBEGIN_OBJ) $(CRTEND_OBJ) $(CRTI_OBJ) $(CRTN_OBJ)
 	$(LINKER)	-o $(BUILDPATH)/sysroot/boot/os.bin 		$(OBJ_LINK_ORDER)

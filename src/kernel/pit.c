@@ -8,7 +8,7 @@
 #include <kernel/idt.h>
 #include <kernel/pic.h>
 #include <stdint.h>
-#include <stdio.h>
+#include <kstdio.h>
 
 /* Wrapper for the pit_irq routine */
 extern void pit_irq_wrapper();
@@ -25,9 +25,9 @@ void pit_irq()
 static inline void set_pit_timer_phase(uint32_t freq_hz)
 {
 	uint16_t divisor = (uint16_t) (1193180 / freq_hz);
-	outb(0x36, 		0x43);	// LSB then MSB - mode
-	outb(divisor & 0xFF, 	0x40);	// LSB
-	outb(divisor >> 8,	0x40);	// MSB
+	outb(0x36, 0x43);           // LSB then MSB - mode
+	outb(divisor & 0xFF, 0x40); // LSB
+	outb(divisor >> 8, 0x40);   // MSB
 }
 
 static void pit_start_counter (uint32_t freq, uint8_t counter, uint8_t mode)
@@ -58,7 +58,7 @@ void pit_init()
 	     0x20,                                      // Interrupt vector.
 	     (uint32_t) &pit_irq_wrapper,               // Callback function.
 	     IDT_32BIT_INTERRUPT_GATE | IDT_PRESENT);   // Type-attributes.
-	printf("Interruptvector #32 (IRQ #0) set as PIT_IRQ.\n");
+	kprintf("Interruptvector #32 (IRQ #0) set as PIT_IRQ.\n");
 	pit_start_counter(PIT_TICK_RATE, PIT_OCW_COUNTER_0, PIT_OCW_MODE_SQUAREWAVEGEN);
 
 }

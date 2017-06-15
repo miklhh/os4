@@ -7,7 +7,7 @@
 #include <stddef.h>
 #include <iso646.h>
 #include <stdbool.h>
-#include <stdio.h>
+#include <kstdio.h>
 #include <kernel/gdt.h>
 #include "tss_entry_struct.h"
 #include <string.h>
@@ -52,8 +52,8 @@ void gdt_init()
 	/* Initialize the GDT position in memory (location is hardcoded, see bootfile). */
 	gdt_pointer = 	0x806;
 	gdtr_location =	0x800;
-	printf("GDT-Start location (in memory): %h\n", gdt_pointer);
-	printf("GDT-Descriptor location (in memory): %h\n", gdtr_location);
+	kprintf("GDT-Start location (in memory): %h\n", gdt_pointer);
+	kprintf("GDT-Descriptor location (in memory): %h\n", gdtr_location);
 
 	/* -------------------------------------------------------------------------------/
 	 * ------------------------------- GDT Content -----------------------------------/
@@ -113,11 +113,11 @@ void gdt_init()
 
 	/* Set the global descriptortable register and reload the segments. */
 	_set_gdtr();
-	printf("GDTR was set. GDTR-size = %h, GDTR-memory-offset = %h\n",
+	kprintf("GDTR was set. GDTR-size = %h, GDTR-memory-offset = %h\n",
 		*(uint16_t*)gdtr_location + 1,
 		*(uint32_t*)(gdtr_location + 2));
 	_reload_segments();
-	printf("Segments reloaded.\n");
+	kprintf("Segments reloaded.\n");
 
 	/* Setup the TSS-entry and load it. */
 	memset(&tss_entry, 0, sizeof(tss_entry));   // Clear the entry.
@@ -138,8 +138,8 @@ void gdt_init()
             : "%ax");
 	
 	/* The descriptor has been set up and is running. */
-	printf("New GDT has been loaded by the CPU.\n");
-	printf("-------\n");
+	kprintf("New GDT has been loaded by the CPU.\n");
+	kprintf("-------\n");
 }
 
 void set_kernel_stack(uint32_t stack)
@@ -151,7 +151,7 @@ int gdt_add_descriptor(uint8_t id, uint64_t desc)
 {
 	uint32_t loc = gdt_pointer + sizeof(uint64_t) * id;
 	*(uint64_t*) loc = desc;
-	printf("Added entry %u = %h << 32 | %h\n", 
+	kprintf("Added entry %u = %h << 32 | %h\n", 
 		id, 
 		(uint32_t) ((*(uint64_t*)loc) >> 32),
 		(uint32_t) (*(uint64_t*)loc));
