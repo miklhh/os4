@@ -26,7 +26,7 @@ Minimal hobby operating system written for the x86 architecture.
 > -- <cite>[OSdev.org article 'Bare Bones', (2017-06-17)][1]</cite>
     
 **Q: GRUB doesn't work. I can't create a bootable diskimage.** </br>
-You might need to install *xorriso*. GRUB is dependant on this piece os software. You can install xorriso throught most package mangagers.
+    You might need to install *xorriso*. GRUB is dependant on this piece os software. You can install xorriso throught most package mangagers.
 
 
 ## Authors
