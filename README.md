@@ -21,12 +21,14 @@ Minimal hobby operating system written for the x86 architecture.
     > grub-mkrescue build/sysroot -o os.iso
     
 ### FAQ
-**Q: QEMU produces an error message: *Could not read from CD-ROM (code 0009)* whils trying to emulate with QEMU.**
-> If your development system is booted from EFI it may be that you don't have the PC-BIOS version of the grub binaries installed anywhere. If you install them then grub-mkrescue will by default produce a hybrid ISO that will work in QEMU. On Ubuntu this can be achieved with: apt-get install grub-pc-bin.
-> -- <cite>[OSdev.org article 'Bare Bones', (2017-06-17)][1]</cite>
-    
 **Q: GRUB doesn't work. I can't create a bootable diskimage.** </br>
-        You might need to install *xorriso*. GRUB is dependant on this piece os software. You can install xorriso throught most package mangagers.
+You might need to install *xorriso* to use GRUB, since GRUB is dependant on that piece of software. You can install *xorriso* through most package mangagers.
+
+**Q: QEMU produces an error message: *Could not read from CD-ROM (code 0009)* when i try to emulate the software.** </br>
+> If your development system is booted from EFI it may be that you don't have the PC-BIOS version of the grub binaries installed anywhere. If you install them then grub-mkrescue will by default produce a hybrid ISO that will work in QEMU. On Ubuntu this can be achieved with: apt-get install grub-pc-bin.
+> -- <cite>[From FAQ on OSDevs.org, (2017-06-17)][1]</cite>
+    
+
 
 
 ## Authors
