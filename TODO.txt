@@ -1,11 +1,10 @@
 1.  - Implement higher half kernel.
+	- Implement a kernel stack smash protector.
 	- Fix multitasking.
 	- Log all the interrupt handlers.
 	- Keyboard driver needs more support.
 	- Start looking into multitasking.
-	- Start looking into 
 
 2.  - Think of a new OS name?
 	- Remove -g flag on release (so that debug symbols wont be avaliable in binary).
-	- Implement a kernel stack smash protector.
     - Add the requierments.txt to the README.md. Remove requierments.txt
