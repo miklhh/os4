@@ -9,13 +9,14 @@
 
 
 /* Syscall interrupt flags macro. */
-#define SYSCALL_INTERRUPT_FLAGS     (IDT_32BIT_INTERRUPT_GATE |  \
-                                     IDT_PRESENT              |  \
+#define SYSCALL_INTERRUPT_FLAGS     (IDT_32BIT_TRAP_GATE |  \
+                                     IDT_PRESENT         |  \
                                      IDT_DPL_3)
 
 /* The syscall entries */
 extern uint32_t sys_0_default_syscall();
 extern uint32_t sys_1_terminal_putchar();
+extern uint32_t sys_2_sleep();
 
 
 /* Function wrapper for the systemcall. */
@@ -41,6 +42,7 @@ void syscall_init()
 
     /* Put acctual syscalls into the vector. */
     syscall_entries[1] = sys_1_terminal_putchar;
+    syscall_entries[2] = sys_2_sleep;
 }
 
 

@@ -36,6 +36,9 @@ objfiles: $(SOURCES)
 	$(ASSEMBLE)											\
 		-o $(OBJOUTPATH)/load_idtr.arch.o				\
 		load_idtr.asm
+	$(ASSEMBLE)											\
+		-o $(OBJOUTPATH)/load_gdtr.arch.o				\
+		load_gdtr.asm
 	$(ASSEMBLE) 	-o $(OBJOUTPATH)/crtn.crtx.o	   	crtn.asm
 	$(ASSEMBLE) 	-o $(OBJOUTPATH)/crti.crtx.o	   	crti.asm
 	#Comment: The prefix *.crtx.o is used so that the linkers wildcard

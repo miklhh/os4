@@ -64,7 +64,6 @@ void idt_init()
 	asm volatile("sti");		// Enable interrupts again.
 	asm volatile("int $0x2f");	// Preform a test interrupt.
 	idt_initialized = 1;
-
 }
 
 /* Set an interrupt (interrupts must first be initialized). */

@@ -25,35 +25,45 @@
 #define FLAG_NOT_EXECUTABLE     (0 << 3)
 #define FLAG_READWRITEBIT       (1 << 1)
 #define FLAG_ACCESSBIT		    (1 << 0)
-
 #define RING_LEVEL(x)		    (x << 5)
 #define FLAG_GRANULARITY_BYTE 	(0 << 15)
 #define FLAG_GRANULARITY_PAGE 	(1 << 15)
 #define FLAG_READ		        (0 << 1)
 #define FLAG_WRITE		        (1 << 1)
 
+#define TYPE_SEG                ((1 << 4) | FLAG_PRESENT)
+#define TYPE_TSS                ((1 << 0) | FLAG_PRESENT)
 
+#define GDT_TABLES              128
 
-#define TYPE_SEG ((1 << 4) | FLAG_PRESENT)
-#define TYPE_TSS ((1 << 0) | FLAG_PRESENT)
+typedef struct __attribute__((packed)) global_descriptor_table_descriptor {
+    uint16_t size;      // GDT size.
+    uint32_t offset;    // Linear address to GDT.
+} gdtd_t;
 
-extern void _set_gdtr();
-extern void _reload_segments();
+typedef struct __attribute__((packed)) global_descriptor_table {
+    gdtd_t gdtd;
+    uint64_t gdt_entrie[GDT_TABLES];
+} gdt_t;
+
+extern void load_gdtr(uint32_t gdtd_location);
+extern void reload_segments();
 extern uint32_t interrupt_stack_top;
 
-static uint32_t gdt_pointer = 0;
-static uint32_t gdt_size = 0;
-static uint32_t gdtr_location = 0;
+static gdt_t gdt;
+static uint16_t gdt_size = 0;
 static tss_entry_t tss_entry;
 
 
 void gdt_init()
 {
-	/* Initialize the GDT position in memory (location is hardcoded, see bootfile). */
-	gdt_pointer = 	0x806;
-	gdtr_location =	0x800;
-	kprintf("GDT-Start location (in memory): %h\n", gdt_pointer);
-	kprintf("GDT-Descriptor location (in memory): %h\n", gdtr_location);
+	/* Initialize the GDT position in memory */
+	kprintf(
+        "GDT-Entries start location (in memory): %x\n", 
+        (uint32_t) &gdt.gdt_entrie[0]);
+	kprintf(
+        "GDT-Descriptor location (in memory): %x\n", 
+        (uint32_t) &gdt.gdtd);
 
 	/* -------------------------------------------------------------------------------/
 	 * ------------------------------- GDT Content -----------------------------------/
@@ -107,16 +117,17 @@ void gdt_init()
 			FLAG_GRANULARITY_PAGE));
 			
 	
-	/* Give the gdt to the CPU. */
-	*(uint16_t*)gdtr_location = (gdt_size - 1) & 0x0000FFFF;
-	*(uint32_t*)(gdtr_location + 2) = gdt_pointer;
+	/* Set the GDT-Descriptor */
+    gdt.gdtd.size = (gdt_size - 1);
+    gdt.gdtd.offset = (uint32_t) &gdt.gdt_entrie[0];
 
 	/* Set the global descriptortable register and reload the segments. */
-	_set_gdtr();
-	kprintf("GDTR was set. GDTR-size = %h, GDTR-memory-offset = %h\n",
-		*(uint16_t*)gdtr_location + 1,
-		*(uint32_t*)(gdtr_location + 2));
-	_reload_segments();
+	load_gdtr((uint32_t) &gdt.gdtd);
+	reload_segments();
+	kprintf(
+        "GDTR loaded. GDT-size = %u bytes, GDT-location = %x\n",
+		gdt.gdtd.size + 1,      // Size is accually size - 1.
+		gdt.gdtd.offset);       // GDT location.
 	kprintf("Segments reloaded.\n");
 
 	/* Setup the TSS-entry and load it. */
@@ -142,24 +153,26 @@ void gdt_init()
 	kprintf("-------\n");
 }
 
+/* Set the kernel stack for interrupts. */
 void set_kernel_stack(uint32_t stack)
 {
 	tss_entry.esp0 = stack;
 }
 
-int gdt_add_descriptor(uint8_t id, uint64_t desc)
+
+/* Add descriptor the the gdt. */
+void gdt_add_descriptor(uint8_t id, uint64_t desc)
 {
-	uint32_t loc = gdt_pointer + sizeof(uint64_t) * id;
-	*(uint64_t*) loc = desc;
-	kprintf("Added entry %u = %h << 32 | %h\n", 
+    gdt.gdt_entrie[id] = desc;
+    gdt_size += sizeof(desc);
+	kprintf("Added entry %u = %x << 32 | %x\n", 
 		id, 
-		(uint32_t) ((*(uint64_t*)loc) >> 32),
-		(uint32_t) (*(uint64_t*)loc));
-	gdt_size += sizeof(desc);
-	return 0;
+		(uint32_t) (gdt.gdt_entrie[id] >> 32),
+		(uint32_t) (gdt.gdt_entrie[id]));
 }
 
 
+/* Help functino for creating a descriptor. */
 uint64_t gdt_create_descriptor(uint32_t base, uint32_t limit, uint16_t flags)
 {
 	uint64_t desc = 0;

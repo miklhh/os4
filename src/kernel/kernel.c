@@ -42,7 +42,7 @@ void kernel_main(void)
 	mm_init(&__kernel_end);
 	
 	// Initialize the paging.
-	//paging_init();
+	paging_init();
 
 	// Initialse the PIC
 	pic_init();
@@ -65,7 +65,7 @@ void kernel_main(void)
         kprintf("CPUID-instruction available.\n");
         uint32_t a, b, c, d;
         __cpuid(0, a, b, c, d);
-        kprintf("EAX: %h\nEBX: %h\nECX: %h\nEDX: %h\n", a, b, c, d);
+        kprintf("EAX: %x\nEBX: %x\nECX: %x\nEDX: %x\n", a, b, c, d);
         print_vendor_label();
         kprintf("\n");
     }
@@ -92,7 +92,7 @@ void kernel_main(void)
         : "=r"(returnvalue)
         :
         :);
-    kprintf("Return value: %h\n", returnvalue);
+    kprintf("Return value: %x\n", returnvalue);
 
     /* Test user-land printf. */
     printf("Userland printf printing!\n");
@@ -105,5 +105,13 @@ void kernel_main(void)
 		{
 			putchar(c);
 		}
+
+    asm volatile(
+        "movl $2, %%eax     \n"
+        "movl $20, %%ebx  \n"
+        "int $0x80          \n"
+        : "=r"(returnvalue)
+        :
+        : "eax", "ebx");
 	}
 }

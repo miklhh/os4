@@ -23,10 +23,12 @@ headers:
 	@echo "No headers here."
 
 objfiles:
-	$(COMPILE) -o $(OBJOUTPATH)/sys_0_default_syscall.syscall.o	\
+	$(COMPILE) -o $(OBJOUTPATH)/sys_0_default_syscall.syscall.o		\
 		-c sys_0_default_syscall.c
-	$(COMPILE) -o $(OBJOUTPATH)/sys_1_terminal_putchar.syscall.o \
+	$(COMPILE) -o $(OBJOUTPATH)/sys_1_terminal_putchar.syscall.o 	\
 		-c sys_1_terminal_putchar.c
+	$(COMPILE) -o $(OBJOUTPATH)/sys_2_print.syscall.o				\
+		-c sys_2_sleep.c
 
 clean:
 	-rm -r $(SYSROOT)/usr/include/kernel

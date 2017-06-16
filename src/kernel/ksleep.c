@@ -6,6 +6,7 @@
 #include <stdint.h>
 #include <kernel/pit.h>
 #include <kernel/ksleep.h>
+#include <kstdio.h>
 
 extern volatile uint32_t __sys_tick;
 
@@ -20,5 +21,4 @@ void ksleep(uint32_t time_ms)
 	{
 		asm volatile ("hlt");
 	}
-	return;
 }
