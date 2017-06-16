@@ -21,7 +21,7 @@ Minimal hobby operating system written for the x86 architecture.
     > grub-mkrescue build/sysroot -o os.iso
     
 ### FAQ
-**Q: QEMU produces an error message: *Could not read from CD-ROM (code 0009)* when i try to emulate the software in QEMU.** </br>
+**Q: QEMU produces an error message: *Could not read from CD-ROM (code 0009)* whils trying to emulate in QEMU.** </br>
 A: 
 > If your development system is booted from EFI it may be that you don't have the PC-BIOS version of the grub binaries installed anywhere. If you install them then grub-mkrescue will by default produce a hybrid ISO that will work in QEMU. On Ubuntu this can be achieved with: apt-get install grub-pc-bin.
 > -- <cite>[OSdev.org article 'Bare Bones', (2017-06-17)][1]</cite>
