@@ -16,25 +16,25 @@
  * http://wiki.osdev.org/GDT 	[1]
  * Last up-time check: 2017-01-07 */
 
-#define FLAG_PRESENT            (1 << 7)
-#define FLAG_FOURTH_BIT         (1 << 4)
-#define FLAG_VALID_SECTOR       (FLAG_PRESENT | FLAG_FOURTH_BIT)
-#define FLAG_PROTECTED_MODE     (1 << 14)
-#define FLAG_REAL_MODE          (0 << 14)
-#define FLAG_EXECUTABLE         (1 << 3)
-#define FLAG_NOT_EXECUTABLE     (0 << 3)
-#define FLAG_READWRITEBIT       (1 << 1)
-#define FLAG_ACCESSBIT	        (1 << 0)
-#define RING_LEVEL(x)	        (x << 5)
-#define FLAG_GRANULARITY_BYTE 	(0 << 15)
-#define FLAG_GRANULARITY_PAGE 	(1 << 15)
-#define FLAG_READ	            (0 << 1)
-#define FLAG_WRITE	            (1 << 1)
+#define FLAG_PRESENT                (1 << 7)
+#define FLAG_FOURTH_BIT             (1 << 4)
+#define FLAG_VALID_SECTOR           (FLAG_PRESENT | FLAG_FOURTH_BIT)
+#define FLAG_PROTECTED_MODE         (1 << 14)
+#define FLAG_REAL_MODE              (0 << 14)
+#define FLAG_EXECUTABLE             (1 << 3)
+#define FLAG_NOT_EXECUTABLE         (0 << 3)
+#define FLAG_READWRITEBIT           (1 << 1)
+#define FLAG_ACCESSBIT	            (1 << 0)
+#define RING_LEVEL(x)	            (x << 5)
+#define FLAG_GRANULARITY_BYTE 	    (0 << 15)
+#define FLAG_GRANULARITY_PAGE 	    (1 << 15)
+#define FLAG_READ                   (0 << 1)
+#define FLAG_WRITE                  (1 << 1)
 
-#define TYPE_SEG                ((1 << 4) | FLAG_PRESENT)
-#define TYPE_TSS                ((1 << 0) | FLAG_PRESENT)
+#define TYPE_SEG                    ((1 << 4) | FLAG_PRESENT)
+#define TYPE_TSS                    ((1 << 0) | FLAG_PRESENT)
 
-#define GDT_TABLES              128
+#define GDT_TABLES                  128
 
 typedef struct __attribute__((packed)) global_descriptor_table_descriptor {
     uint16_t size;      // GDT size.
