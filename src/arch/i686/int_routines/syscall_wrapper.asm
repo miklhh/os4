@@ -3,7 +3,6 @@
 ; Author: Mikael Henriksson, miklhh
 ;
 
-
 section .text
 global syscall_wrapper
 syscall_wrapper:

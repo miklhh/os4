@@ -51,7 +51,7 @@ void general_protection_fault()
 		movl	%%eax, %0;"
 		:"=r"(error_code)       // Output.
 		:                       // Input.
-		:"%eax");	            // Clobbered registers.
+		:"%eax");               // Clobbered registers.
 	kprintf("%h", error_code);
 
 	asm volatile("cli; hlt;");

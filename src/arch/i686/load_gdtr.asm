@@ -8,16 +8,16 @@ section .text
 ; -- Function for loading the GDT-register.
 global load_gdtr:function (load_gdtr.end - load_gdtr)
 load_gdtr:
-	push  ebp
+    push  ebp
     mov   ebp, esp
     push  eax
 
     mov   eax, [ebp + 8]
-	lgdt  [eax]
+    lgdt  [eax]
 
     pop   eax
-	pop   ebp
-	ret
+    pop   ebp
+    ret
 .end:
 
 

@@ -24,12 +24,12 @@
 #define FLAG_EXECUTABLE         (1 << 3)
 #define FLAG_NOT_EXECUTABLE     (0 << 3)
 #define FLAG_READWRITEBIT       (1 << 1)
-#define FLAG_ACCESSBIT		    (1 << 0)
-#define RING_LEVEL(x)		    (x << 5)
+#define FLAG_ACCESSBIT	        (1 << 0)
+#define RING_LEVEL(x)	        (x << 5)
 #define FLAG_GRANULARITY_BYTE 	(0 << 15)
 #define FLAG_GRANULARITY_PAGE 	(1 << 15)
-#define FLAG_READ		        (0 << 1)
-#define FLAG_WRITE		        (1 << 1)
+#define FLAG_READ	            (0 << 1)
+#define FLAG_WRITE	            (1 << 1)
 
 #define TYPE_SEG                ((1 << 4) | FLAG_PRESENT)
 #define TYPE_TSS                ((1 << 0) | FLAG_PRESENT)
@@ -143,8 +143,8 @@ void gdt_init()
 	/* 'Load task register'. */
 	asm volatile(	
             "movw   $0x2b, %%ax \n"
-			"ltr    %%ax        \n" 
-			: 
+            "ltr    %%ax        \n" 
+            : 
             : 
             : "%ax");
 	

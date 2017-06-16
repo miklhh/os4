@@ -24,7 +24,7 @@ Minimal hobby operating system written for the x86 architecture.
 **Q: GRUB doesn't work. I can't create a bootable diskimage.** </br>
 You might need to install *xorriso* to use GRUB, since GRUB is dependant on that piece of software. You can install *xorriso* through most package mangagers.
 
-**Q: QEMU produces an error message: *Could not read from CD-ROM (code 0009)* when i try to emulate the software.** </br>
+**Q: QEMU produces an error message: *'Could not read from CD-ROM (code 0009)'* when i try to emulate the software.** </br>
 > If your development system is booted from EFI it may be that you don't have the PC-BIOS version of the grub binaries installed anywhere. If you install them then grub-mkrescue will by default produce a hybrid ISO that will work in QEMU. On Ubuntu this can be achieved with: apt-get install grub-pc-bin.
 > -- <cite>[FAQ on 'Bare Bones' on OSDev.org (2017-06-17)][1]</cite>
     
