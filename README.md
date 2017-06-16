@@ -13,10 +13,10 @@ Minimal hobby operating system written for the x86 architecture.
 2. Download the files from the repository.
 3. Change the *CROSSCOMPILERPATH* field in ***src/make.config*** to match the path of your installed cross-compiler. If you've installed any other cross-compiler than the one for the i686 arcitecture you have to manually change the appropriate fields in this file.
 4. Whils in the ***src*** directory, build the software by running GNU make in the following manner.
-    1. *make headers*
-    2. *make objfiles*
-    3. *make libs*
-    4. *make os*
+    1. > *make headers*
+    2. > *make objfiles*
+    3. > *make libs*
+    4. > *make os*
 5. To generate a bootable disk image, run the following command in the repository root directory:
     > grub-mkrescue build/sysroot -o os.iso
   
