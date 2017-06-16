@@ -24,6 +24,9 @@ Minimal hobby operating system written for the x86 architecture.
 ## Authors
 * **Mikael Henriksson** - *Code and testing* - [https://github.com/miklhh](https://github.com/miklhh)
 
+## License
+This project is licensed under MIT License - see the [LICENSE.txt](LICENSE.txt) for more details.
+
 Version: 1.3.1 <br />
 Version Date: 2017-06-16
 
