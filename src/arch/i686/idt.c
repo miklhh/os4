@@ -8,30 +8,37 @@
 #include <kstdio.h>
 #include <kernel/panic.h>
 
-
-/* Variables. */
-static uint32_t idtr_location =	0;
-static uint32_t idt_location = 0;
-static uint16_t idt_size = 0x800;
-static uint8_t 	idt_initialized = 0;
-
 /* Extern functions */
-extern void	load_idtr();
+extern void	load_idtr(uint32_t idtd_location);
 extern void	__idt_default_handler();
 extern void	interrupt_test_handler();
 
-uint64_t idt_create_entry(uint32_t int_addr, uint16_t selector, uint8_t type_attr);
-void idt_register_interrupt(uint8_t i, uint32_t entry, uint8_t type_attribute);
+
+/* IDT fields. */
+static uint8_t 	idt_initialized = 0;
+static idtd_t idtd;
+static idt_t idt;
+
+
+/* Register an interrupt */
+void idt_register_interrupt(uint8_t i, uint32_t callback, uint8_t type_attribute)
+{
+    uint64_t descriptor = 0x00;
+    descriptor |= (uint64_t) callback & 0x0000ffff;     // Callback lower addr.
+    descriptor |= (uint64_t) 0x08 << 16;                // Kernel code selector.
+    descriptor |= (uint64_t) type_attribute << 40;      // Descriptor type atr.
+    descriptor |= (uint64_t) (callback >> 16) << 48;    // Callback higher addr.
+    idt[i] = descriptor;
+}
+
 
 /* Initialize the idt. */
 void idt_init()
 {
     interrupt_dissable();
 
-	idt_location = 0x2000;
-	idtr_location = 0x10F0;
-	kprintf("IDT location (in memory): %x \n", idt_location);
-	kprintf("IDT-Descriptor location (in memory): %x\n", idtr_location);
+	kprintf("IDT location (in memory): %x \n", (uint32_t) &idt);
+	kprintf("IDT-Descriptor location (in memory): %x\n", (uint32_t) &idtd);
 	
 	/* Register the interrupts */
 	for (uint8_t i = 0; i < 255; i++)
@@ -49,22 +56,22 @@ void idt_init()
 		IDT_PRESENT | IDT_32BIT_INTERRUPT_GATE);    // Type attributes.
 	
 	/* Register the IDT */
-	*(uint16_t*)idtr_location       = idt_size - 1;
-	*(uint32_t*)(idtr_location + 2) = idt_location;
+    idtd.size = IDT_ENTRIES * 8 - 1;        // Entries * bytes/entrie - 1.
+    idtd.location = (uint32_t) idt;
 	kprintf(
-        "IDTR-size = %u, IDT-offset = %x\n", 
-        *(uint16_t*)idtr_location,
-        *(uint32_t*)(idtr_location + 2));
+        "IDT-size = %u, IDT-location = %x, IDTD-locaion = %x\n", 
+        idtd.size,
+        idtd.location,
+        (uint32_t) &idtd);
 
         
-	load_idtr();
+	load_idtr((uint32_t) &idtd);
 	kprintf("IDTR set, preforming test interrupt.\n");
 
-	
 	interrupt_enable();
-	asm volatile("int $0x2f");	// Preform a test interrupt.
 	idt_initialized = 1;
 }
+
 
 /* Set an interrupt (interrupts must first be initialized). */
 void set_int(uint8_t i, uint32_t callback, uint8_t type_attribute)
@@ -84,12 +91,3 @@ void set_int(uint8_t i, uint32_t callback, uint8_t type_attribute)
 	}
 }
 
-/* Register an interrupt */
-void idt_register_interrupt(uint8_t i, uint32_t callback, uint8_t type_attribute)
-{
-	*(uint16_t*)(idt_location + 8*i + 0) = (uint16_t)(callback & 0x0000ffff);
-	*(uint16_t*)(idt_location + 8*i + 2) = (uint16_t)0x8;
-	*(uint8_t*) (idt_location + 8*i + 4) = 0x00;
-	*(uint8_t*) (idt_location + 8*i + 5) = type_attribute;
-	*(uint16_t*)(idt_location + 8*i + 6) = (uint16_t)((callback & 0xffff0000) >> 16);
-}

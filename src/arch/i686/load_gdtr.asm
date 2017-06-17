@@ -4,13 +4,13 @@
 ;
 
 section .text
+global load_gdtr:function (load_gdtr.end - load_gdtr)
 
-; -- Function for loading the GDT-register.
+; -- Routine for loading the GDT-register.
 ; After base pointer push:
 ; [ebp + 8] == uint32_t gdtd_location (4 bytes).
 ; [ebp + 4] == Return address (4 bytes).
 ; [ebp + 0] == Last base pointer (4 bytes).
-global load_gdtr:function (load_gdtr.end - load_gdtr)
 load_gdtr:
     push  ebp
     mov   ebp, esp
@@ -25,9 +25,10 @@ load_gdtr:
 .end:
 
 
-; -- Function for reloading the segments. Should be called once after
-;    the gdtr register has been set.
 global reload_segments:function (reload_segments.end - reload_segments)
+
+; -- Routine for reloading the segments. Should be called once after
+;    the gdtr register has been set.
 reload_segments:
 	push  ebp
 	mov   ebp, esp

@@ -12,10 +12,6 @@
 #include "tss_entry_struct.h"
 #include <string.h>
 
-/* The structure for the GDT can be found on:
- * http://wiki.osdev.org/GDT 	[1]
- * Last up-time check: 2017-01-07 */
-
 #define FLAG_PRESENT                (1 << 7)
 #define FLAG_FOURTH_BIT             (1 << 4)
 #define FLAG_VALID_SECTOR           (FLAG_PRESENT | FLAG_FOURTH_BIT)
@@ -33,17 +29,18 @@
 
 #define TYPE_SEG                    ((1 << 4) | FLAG_PRESENT)
 #define TYPE_TSS                    ((1 << 0) | FLAG_PRESENT)
+#define MAX_GDT_ENTRIES             128
 
-#define GDT_TABLES                  128
-
+/* Structure for the GDTD */
 typedef struct __attribute__((packed)) global_descriptor_table_descriptor {
-    uint16_t size;      // GDT size.
-    uint32_t offset;    // Linear address to GDT.
+    uint16_t size;      // GDT size in byte minus one.
+    uint32_t location;    // Linear address to GDT.
 } gdtd_t;
 
+/* Structure for an entire GDT (including GDTD) */
 typedef struct __attribute__((packed)) global_descriptor_table {
     gdtd_t gdtd;
-    uint64_t gdt_entrie[GDT_TABLES];
+    uint64_t descriptor[MAX_GDT_ENTRIES];
 } gdt_t;
 
 extern void load_gdtr(uint32_t gdtd_location);
@@ -60,18 +57,16 @@ void gdt_init()
 	/* Initialize the GDT position in memory */
 	kprintf(
         "GDT-Entries start location (in memory): %x\n", 
-        (uint32_t) &gdt.gdt_entrie[0]);
+        (uint32_t) &gdt.descriptor[0]);
 	kprintf(
         "GDT-Descriptor location (in memory): %x\n", 
         (uint32_t) &gdt.gdtd);
 
-	/* -------------------------------------------------------------------------------/
-	 * ------------------------------- GDT Content -----------------------------------/
-	 * ------------------------------------------------------------------------------*/
-	/* Null descriptor. Entry 0. Offset 0x00 */
+
+	/* Add null descriptor. Entry 0. Offset 0x00 */
 	gdt_add_descriptor(0, 0);
 
-	/* Kernel code segment. Entry 1. Offset 0x08. */
+	/* Add kernel code segment. Entry 1. Offset 0x08. */
 	gdt_add_descriptor(
 		1, 
 		gdt_create_descriptor(
@@ -80,7 +75,7 @@ void gdt_init()
 			FLAG_VALID_SECTOR | FLAG_PROTECTED_MODE | RING_LEVEL(0) | 
 			FLAG_EXECUTABLE | FLAG_READWRITEBIT | FLAG_GRANULARITY_PAGE));
 
-	/* Kernel data segment. Entry 2. Offset 0x10. */
+	/* Add kernel data segment. Entry 2. Offset 0x10. */
 	gdt_add_descriptor(
 		2,
 		gdt_create_descriptor(
@@ -89,7 +84,7 @@ void gdt_init()
 			FLAG_VALID_SECTOR | FLAG_PROTECTED_MODE | RING_LEVEL(0) |
 			FLAG_NOT_EXECUTABLE | FLAG_READWRITEBIT | FLAG_GRANULARITY_PAGE));
 
-	/* User code segment. Entry 3. Offset 0x18. */
+	/* Add user code segment. Entry 3. Offset 0x18. */
 	gdt_add_descriptor(
 		3,
 		gdt_create_descriptor(
@@ -98,7 +93,7 @@ void gdt_init()
 			FLAG_VALID_SECTOR | FLAG_PROTECTED_MODE | RING_LEVEL(3) |
 			FLAG_EXECUTABLE | FLAG_READWRITEBIT | FLAG_GRANULARITY_PAGE));
 
-	/* User data segment. Entry 4. Offset 0x20. */
+	/* Add user data segment. Entry 4. Offset 0x20. */
 	gdt_add_descriptor(
 		4,
 		gdt_create_descriptor(
@@ -119,7 +114,7 @@ void gdt_init()
 	
 	/* Set the GDT-Descriptor */
     gdt.gdtd.size = (gdt_size - 1);
-    gdt.gdtd.offset = (uint32_t) &gdt.gdt_entrie[0];
+    gdt.gdtd.location = (uint32_t) &gdt.descriptor[0];
 
 	/* Set the global descriptortable register and reload the segments. */
 	load_gdtr((uint32_t) &gdt.gdtd);
@@ -127,7 +122,7 @@ void gdt_init()
 	kprintf(
         "GDTR loaded. GDT-size = %u bytes, GDT-location = %x\n",
 		gdt.gdtd.size + 1,      // Size is accually size - 1.
-		gdt.gdtd.offset);       // GDT location.
+		gdt.gdtd.location);     // GDT location.
 	kprintf("Segments reloaded.\n");
 
 	/* Setup the TSS-entry and load it. */
@@ -163,12 +158,12 @@ void set_kernel_stack(uint32_t stack)
 /* Add descriptor the the gdt. */
 void gdt_add_descriptor(uint8_t id, uint64_t desc)
 {
-    gdt.gdt_entrie[id] = desc;
+    gdt.descriptor[id] = desc;
     gdt_size += sizeof(desc);
 	kprintf("Added entry %u = %x << 32 | %x\n", 
 		id, 
-		(uint32_t) (gdt.gdt_entrie[id] >> 32),
-		(uint32_t) (gdt.gdt_entrie[id]));
+		(uint32_t) (gdt.descriptor[id] >> 32),
+		(uint32_t) (gdt.descriptor[id]));
 }
 
 
