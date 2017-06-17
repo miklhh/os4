@@ -18,7 +18,7 @@ SOURCES = kernel.c \
 ###Build-options:
 CFLAGS = -ffreestanding -Wall -Wextra -O2 -std=gnu11
 COMPILE = $(GCC) $(CFLAGS) -D__is_kernel -Iinclude --sysroot=$(SYSROOT) \
-	  -isystem=/usr/include
+	-isystem=/usr/include
 
 
 ###Recipes:

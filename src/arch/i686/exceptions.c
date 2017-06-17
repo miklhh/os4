@@ -38,7 +38,8 @@ void exceptions_init()
 void divide_by_zero_error()
 {
 	kprintf("ERROR, DIVEDE-BY-ZERO ERROR, HALTING.");
-	asm volatile("cli; hlt;");
+    interrupt_dissable();
+	asm volatile("hlt");
 }
 
 // General protection fault.
@@ -53,13 +54,14 @@ void general_protection_fault()
 		:                       // Input.
 		:"%eax");               // Clobbered registers.
 	kprintf("%h", error_code);
-
-	asm volatile("cli; hlt;");
+    interrupt_dissable();
+	asm volatile("hlt");
 }
 
 // Page fault.
 void page_fault()
 {
 	kprintf("ERROR, PAGE FAULT, HALTING.");
-	asm volatile("cli; hlt");
+    interrupt_dissable();
+	asm volatile("hlt");
 }

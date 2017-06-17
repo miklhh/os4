@@ -6,6 +6,10 @@
 section .text
 
 ; -- Function for loading the GDT-register.
+; After base pointer push:
+; [ebp + 8] == uint32_t gdtd_location (4 bytes).
+; [ebp + 4] == Return address (4 bytes).
+; [ebp + 0] == Last base pointer (4 bytes).
 global load_gdtr:function (load_gdtr.end - load_gdtr)
 load_gdtr:
     push  ebp

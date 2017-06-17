@@ -1,7 +1,7 @@
 ###Include:
 include make.config
 GCC = $(CROSSCOMPILER)
-SUBDIR = kernel libc drivers
+LD = $(CROSSLINKER)
 
 ###PATHS:
 BUILDPATH = ../build
@@ -25,13 +25,12 @@ CRTN_OBJ = $(OBJOUTPATH)/crtn.crtx.o
 
 #Link-list (please note the links inside of the crt-objects):
 OBJ_LINK_ORDER = $(CRTI_OBJ) $(CRTBEGIN_OBJ) $(LINKFILES) -nostdlib \
-		    -lk -lc -lgcc $(CRTEND_OBJ) $(CRTN_OBJ)
+    -lk -lc -lgcc $(CRTEND_OBJ) $(CRTN_OBJ)
 
 ###Build-options:
 CFLAGS = -ffreestanding -Wall -Wextra -O2 -g -std=gnu11
 LINKERFLAGS = -ffreestanding -Wall -Wextra -O2
-LINKER = $(GCC) $(LINKERFLAGS) --sysroot=$(SYSROOT) -isystem=/usr/include \
-	 -Tlinker.ld
+LINKER = $(GCC) $(LINKERFLAGS) --sysroot=$(SYSROOT) -Tlinker.ld
 
 headers:
 	@echo "Making Headers"
@@ -53,7 +52,7 @@ libs:
 	cd libc && $(MAKE) libs
 
 os: $(LINKFILES) $(CRTBEGIN_OBJ) $(CRTEND_OBJ) $(CRTI_OBJ) $(CRTN_OBJ)
-	$(LINKER)	-o $(BUILDPATH)/sysroot/boot/os.bin 		$(OBJ_LINK_ORDER)
+	$(LINKER) -o $(BUILDPATH)/sysroot/boot/os.bin $(OBJ_LINK_ORDER)
 
 iso:
 	@echo "I am not ready for this yet..."

@@ -26,7 +26,7 @@ void idt_register_interrupt(uint8_t i, uint32_t entry, uint8_t type_attribute);
 /* Initialize the idt. */
 void idt_init()
 {
-	asm volatile("cli");	// Disable interrupts while initializing interrupts.
+    interrupt_dissable();
 
 	idt_location = 0x2000;
 	idtr_location = 0x10F0;
@@ -61,7 +61,7 @@ void idt_init()
 	kprintf("IDTR set, preforming test interrupt.\n");
 
 	
-	asm volatile("sti");		// Enable interrupts again.
+	interrupt_enable();
 	asm volatile("int $0x2f");	// Preform a test interrupt.
 	idt_initialized = 1;
 }

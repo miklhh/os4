@@ -20,5 +20,9 @@
 void idt_init();
 void set_int(uint8_t i, uint32_t callback, uint8_t type_attr);
 
+/* Inline functions for setting and clearing interruptflag. */
+static inline void interrupt_dissable() { asm volatile ("cli"); }
+static inline void interrupt_enable() { asm volatile ("sti"); }
+
 #endif
 
