@@ -132,14 +132,6 @@ void* kmalloc(size_t size)
 	return (void*) ((uint32_t) alloc + sizeof(alloc_t));
 }
 
-/* Used to return page aligned memory. */
-/*
-void kfree_p(void *page_mem)
-{
-	
-}
-*/
-
 void kfree(void *mem)
 {
 	alloc_t* alloc = (alloc_t*) (mem - sizeof(alloc_t));
