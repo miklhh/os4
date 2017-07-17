@@ -21,6 +21,7 @@ extern uint8_t tasking_initialized;
  */
 void timer_irq()
 {
+    /* Increase the system tick variable. */
     __sys_tick++;
 
     /* Call the task preempt function if tasking has been initialized. */

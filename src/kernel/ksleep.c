@@ -16,7 +16,6 @@ void ksleep(uint32_t time_ms)
 {
 	/* The tick rate is 1000Hz. */
 	uint32_t tick = __sys_tick;
-
 	while (tick + time_ms >= __sys_tick)
 	{
 		asm volatile ("hlt");

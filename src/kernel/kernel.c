@@ -26,38 +26,38 @@ extern uint32_t interrupt_stack_top;
 
 void kernel_main(void)
 {
-	// Initialize terminal, for being able to write.
-	terminal_init();
+    // Initialize terminal, for being able to write.
+    terminal_init();
 
-	// Initialize the GDT.
-	gdt_init();
-	
-	// Initialize the IDT.
-	idt_init();
+    // Initialize the GDT.
+    gdt_init();
+    
+    // Initialize the IDT.
+    idt_init();
 
-	// Initialize exeptions.
-	exceptions_init();
-	
-	// Initalize the heap data.
-	mm_init(&__kernel_end);
-	
-	// Initialize the paging.
-	paging_init();
+    // Initialize exeptions.
+    exceptions_init();
+    
+    // Initalize the heap data.
+    mm_init(&__kernel_end);
+    
+    // Initialize the paging.
+    paging_init();
 
-	// Initialize the PIC
-	pic_init();
+    // Initialize the PIC
+    pic_init();
 
-	// Initialze timer..
-	timer_init();
+    // Initialze timer.
+    timer_init();
 
     // Initialize system calls.
     syscall_init();
 
-	// Print kernel start and kernel end.
-	kprintf("Kernel start: %x, and kernel end: %x\n", &__kernel_start, &__kernel_end);
+    // Print kernel start and kernel end.
+    kprintf("Kernel start: %x, and kernel end: %x\n", &__kernel_start, &__kernel_end);
 
-	// Initialize keyboard driver.
-	keyboard_init();
+    // Initialize keyboard driver.
+    keyboard_init();
 
     // Test if the CPUID instructions works.
     if (test_cpuid())
@@ -75,9 +75,9 @@ void kernel_main(void)
     }
 
 
-	/* ------------------------------------------------ */
-	set_kernel_stack((uint32_t) &interrupt_stack_top);
-	//switch_to_user_mode();
+    /* ------------------------------------------------ */
+    set_kernel_stack((uint32_t) &interrupt_stack_top);
+    //switch_to_user_mode();
     interrupt_enable();
 
     // Test a systemcall
@@ -110,13 +110,13 @@ void kernel_main(void)
 
 
     // Keyboard.
-	while (1)
-	{
-		char c = keyboard_get_key();
-		if (c)
-		{
-			putchar(c);
-		}
+    while (1)
+    {
+        char c = keyboard_get_key();
+        if (c)
+        {
+            putchar(c);
+        }
     // Sleep 20ms.
     asm volatile(
         "movl $2, %%eax     \n"
@@ -125,5 +125,5 @@ void kernel_main(void)
         : "=r"(returnvalue)
         :
         : "eax", "ebx");
-	}
+    }
 }
