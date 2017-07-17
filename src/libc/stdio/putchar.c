@@ -1,9 +1,9 @@
+/*
+ * Part of OS4, putchar.c
+ * Author: Mikael Henriksson. miklhh
+ */
+
 #include <stdio.h>
-
-#if defined (__is_libk)
-#include <driver/tty.h>
-#endif
-
 
 
 int putchar(int character)
@@ -14,7 +14,7 @@ int putchar(int character)
             "movw   $1, %%ax        \n"
             "int    $0x80           \n"
             :
-            : "r"(c)
+            : "q"(c)
             : "%bl");
 
     return character;

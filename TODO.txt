@@ -1,10 +1,14 @@
-1.  - Implement higher half kernel.
-	- Implement a kernel stack smash protector.
-	- Fix multitasking.
+1.  - Work on the tasking.
+        - Implement a fork function?
+        - Implement a exec function?
+        - Test for stability in current implementation.
+        - Clean up old code.
+        - Pimp the current code...
+    - Implement loging system.
+    - Complete FAT32 filesystem.
+    - Implement a kernel stack smash protector.
 	- Log all the interrupt handlers.
 	- Keyboard driver needs more support.
-	- Start looking into multitasking.
+    - Implement higher half kernel.
 
-2.  - Think of a new OS name?
-	- Remove -g flag on release (so that debug symbols wont be avaliable in binary).
-    - Add the requierments.txt to the README.md. Remove requierments.txt
+2.  - Remove -g flag on release (so that debug symbols wont be avaliable in binary).

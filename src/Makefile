@@ -15,7 +15,7 @@ LINKFILES =										\
 	    $(wildcard $(OBJOUTPATH)/*.driver.o)	\
 	    $(wildcard $(OBJOUTPATH)/*.arch.o)		\
 	    $(wildcard $(OBJOUTPATH)/*.memory.o)	\
-		$(wildcard $(OBJOUTPATH)/*.syscall.o)
+		#$(wildcard $(OBJOUTPATH)/*.syscall.o)
 
 #CRT-linkfiles:
 CRTI_OBJ = $(OBJOUTPATH)/crti.crtx.o
@@ -39,7 +39,6 @@ headers:
 	cd kernel && $(MAKE) headers 
 	cd arch && $(MAKE) headers
 	cd memory && $(MAKE) headers
-	cd thread && $(MAKE) headers
 
 objfiles:
 	-mkdir -p $(BUILDPATH)/objfiles
@@ -48,7 +47,6 @@ objfiles:
 	cd kernel && $(MAKE) objfiles
 	cd arch && $(MAKE) objfiles
 	cd memory && $(MAKE) objfiles
-	cd thread && $(MAKE) objfiles
 
 libs:
 	cd libc && $(MAKE) libs

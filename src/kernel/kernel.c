@@ -11,11 +11,11 @@
 #include <driver/keyboard.h>
 #include <kernel/gdt.h>
 #include <kernel/idt.h>
-#include <kernel/pit.h>
 #include <kernel/pic.h>
+#include <kernel/timer.h>
 #include <kernel/syscall.h>
 #include <kernel/exceptions.h>
-#include <kernel/task.h>
+#include <task/task.h>
 #include <kernel/ksleep.h>
 #include <system/cpuid.h>
 #include <string.h>
@@ -44,11 +44,11 @@ void kernel_main(void)
 	// Initialize the paging.
 	paging_init();
 
-	// Initialse the PIC
+	// Initialize the PIC
 	pic_init();
 
-	// Initialze PIT.
-	pit_init();
+	// Initialze timer..
+	timer_init();
 
     // Initialize system calls.
     syscall_init();
@@ -66,7 +66,7 @@ void kernel_main(void)
         uint32_t a, b, c, d;
         __cpuid(0, a, b, c, d);
         kprintf("EAX: %x\nEBX: %x\nECX: %x\nEDX: %x\n", a, b, c, d);
-        print_vendor_label();
+        print_vendor_label_kstdio();
         kprintf("\n");
     }
     else
@@ -77,7 +77,8 @@ void kernel_main(void)
 
 	/* ------------------------------------------------ */
 	set_kernel_stack((uint32_t) &interrupt_stack_top);
-	switch_to_user_mode();
+	//switch_to_user_mode();
+    interrupt_enable();
 
     // Test a systemcall
     asm volatile(
@@ -97,7 +98,18 @@ void kernel_main(void)
     /* Test user-land printf. */
     printf("Userland printf printing!\n");
 
-	/* Testing keyboard. */
+    task_enable();
+    kprintf("Returned to kernel main.\n");
+    /*
+    while(1)
+    {
+        kprintf("Hello world!\n");
+        ksleep(1000);
+    }
+    */
+
+
+    // Keyboard.
 	while (1)
 	{
 		char c = keyboard_get_key();
@@ -105,7 +117,7 @@ void kernel_main(void)
 		{
 			putchar(c);
 		}
-
+    // Sleep 20ms.
     asm volatile(
         "movl $2, %%eax     \n"
         "movl $20, %%ebx  \n"

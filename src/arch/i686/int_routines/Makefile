@@ -35,8 +35,5 @@ objfiles:
 	$(ASSEMBLE) -o $(OBJOUTPATH)/syscall_wapper.arch.o \
 		syscall_wrapper.asm
 
-	$(COMPILE) -o $(OBJOUTPATH)/interrupt_test_handler.arch.o \
-		   -c interrupt_test_handler.c
-
 clean:
 	echo "Nothing to clean here."

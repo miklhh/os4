@@ -4,17 +4,17 @@
  */
 
 #include <stdint.h>
-#include <stdio.h>
+#include <kstdio.h>
 #include <kernel/io.h>
 
-#define PIC1		0x20  // IO-Port of master PIC.
-#define PIC2		0xA0  // IO-Port of slave PIC.
+#define PIC1            0x20  // IO-Port of master PIC.
+#define PIC2            0xA0  // IO-Port of slave PIC.
 
-#define PIC1_COMMAND	0x20
-#define PIC1_DATA	0x21
-#define PIC2_COMMAND	0xA0
-#define PIC2_DATA	0xA1
-#define PIC_EOI		0x20
+#define PIC1_COMMAND    0x20
+#define PIC1_DATA       0x21
+#define PIC2_COMMAND    0xA0
+#define PIC2_DATA       0xA1
+#define PIC_EOI         0x20
 
 /* End-of-interrupt routine. */
 void pic_send_eoi(uint8_t irq)
@@ -42,5 +42,5 @@ void pic_init()
 	outb(0x01, PIC2_DATA);		// Enable 8086-mode (PIC2).
 	outb(0x00, PIC1_DATA);		// Reset the mask level (PIC1).
 	outb(0x00, PIC2_DATA);		// Reset the mask level (PIC2).
-	printf("PIC initialized!\n");
+	kprintf("PIC initialized!\n");
 }

@@ -3,11 +3,12 @@
 ; Author Mikael Henriksson, miklhh
 ;
 
-global interrupt_test_handler:function (interrupt_test_handler.end - interrupt_test_handler)
+global interrupt_test_handler
 interrupt_test_handler:
 	pusha
-	extern interrupt_test_handler_function
-	call interrupt_test_handler_function
+    
+    extern      idt_initialized
+    mov         byte[idt_initialized], 0xAB
+
 	popa
 	iret
-.end:

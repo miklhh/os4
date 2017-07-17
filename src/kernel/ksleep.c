@@ -8,7 +8,7 @@
 #include <kernel/ksleep.h>
 #include <kstdio.h>
 
-extern volatile uint32_t __sys_tick;
+extern volatile uint64_t __sys_tick;
 
 /* This function requieres ring 0 priviliges. Otherwise it will throw a general
  * protection fault. */

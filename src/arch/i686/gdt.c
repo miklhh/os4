@@ -160,7 +160,7 @@ void gdt_add_descriptor(uint8_t id, uint64_t desc)
 {
     gdt.descriptor[id] = desc;
     gdt_size += sizeof(desc);
-	kprintf("Added entry %u = %x << 32 | %x\n", 
+	kprintf("    Added entry %u = %x << 32 | %x\n", 
 		id, 
 		(uint32_t) (gdt.descriptor[id] >> 32),
 		(uint32_t) (gdt.descriptor[id]));

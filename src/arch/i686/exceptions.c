@@ -53,7 +53,7 @@ void general_protection_fault()
 		:"=r"(error_code)       // Output.
 		:                       // Input.
 		:"%eax");               // Clobbered registers.
-	kprintf("%h", error_code);
+	kprintf("%x", error_code);
     interrupt_dissable();
 	asm volatile("hlt");
 }

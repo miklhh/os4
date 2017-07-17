@@ -25,16 +25,15 @@ COMPILE = $(GCC) $(CFLAGS) -D__is_kernel -Iinclude --sysroot=$(SYSROOT) \
 headers:
 	mkdir -p $(SYSROOT)/usr/include
 	cp -r include/ $(SYSROOT)/usr/
-	cd syscalls && $(MAKE) headers
+	cd sys && $(MAKE) headers
 
 objfiles:
 	$(COMPILE) -o $(OBJOUTPATH)/kernel.kernel.o		-c kernel.c
-	$(COMPILE) -o $(OBJOUTPATH)/pit.kernel.o		-c pit.c
+	$(COMPILE) -o $(OBJOUTPATH)/timer.kernel.o		-c timer.c
 	$(COMPILE) -o $(OBJOUTPATH)/ksleep.kernel.o		-c ksleep.c
-	$(COMPILE) -o $(OBJOUTPATH)/panic.kernel.o		-c panic.c
-	$(COMPILE) -o $(OBJOUTPATH)/syscall.kernel.o	-c syscall.c
-	cd syscalls && $(MAKE) objfiles
+	cd sys && $(MAKE) objfiles
 
 clean:
 	-rm -r $(SYSROOT)/usr/include/kernel
 	-rm -r $(wildcard $(OBJOUTPATH)/*.kernel.o)
+	cd sys && $(MAKE) clean

@@ -27,8 +27,8 @@
 #define PAGE_TABLE_PRESENT_BIT          (1 << 0)
 
 /* Change these when a page-frame allocater has been added. */
-static uint32_t kernel_start_page_directory[1024] __attribute__((aligned(4096)));
-static uint32_t kernel_test_page_table[1024] __attribute__((aligned(4096)));
+uint32_t kernel_page_directory[1024] __attribute__((aligned(4096)));
+static uint32_t kernel_page_table[1024] __attribute__((aligned(4096)));
 
 extern void load_page_directory(uint32_t* page_dir);
 extern void enable_paging();
@@ -36,25 +36,25 @@ extern void enable_paging();
 void paging_init()
 {
 	/* Make sure the page-directory has been properly 4k-aligned. */
-	if ((uint32_t)kernel_start_page_directory % 0x1000 != 0)
+	if ((uint32_t)kernel_page_directory % 0x1000 != 0)
 	{
 		panic("Kernel panic: Could not 4k-align the Page-Directory.");
 	}
 
 	kprintf(
-        "Kernel setup page-directory start location: %h\n", 
-        (uint32_t) kernel_start_page_directory);
+        "Kernel page-directory start location: %x\n", 
+        (uint32_t) kernel_page_directory);
 
 	/* Set all the entries in the page directory to non-present. */
 	for (uint16_t i = 0; i < 1024; i++)
 	{
-		kernel_start_page_directory[i] = PAGE_DIR_READ_WRITE_BIT;
+		kernel_page_directory[i] = PAGE_DIR_READ_WRITE_BIT;
 	}
 
 	/* Page the first four mebibytes of memory the their corresponding address. */
 	for (uint32_t i = 0; i < 1024; i++)
 	{
-		kernel_test_page_table[i] = 	
+		kernel_page_table[i] = 	
                     (i * 0x1000)                    | 
                     PAGE_TABLE_PRESENT_BIT          |
                     PAGE_TABLE_READ_WRITE_BIT       |
@@ -62,14 +62,14 @@ void paging_init()
 	}
 
 	/* Add the page table to the page directory. */
-	kernel_start_page_directory[0] = 	
-                ((uint32_t) kernel_test_page_table) |
+	kernel_page_directory[0] = 	
+                ((uint32_t) kernel_page_table) |
 				PAGE_DIR_PRESENT_BIT                |
 				PAGE_DIR_READ_WRITE_BIT             |
 				PAGE_DIR_USER_BIT;
 	
 	/* Enable paging */
-	load_page_directory(kernel_start_page_directory);
+	load_page_directory(kernel_page_directory);
 	enable_paging();
 	kprintf("Paging enabled.\n");
 }

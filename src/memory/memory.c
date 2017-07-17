@@ -6,7 +6,7 @@
 #include <string.h>
 #include <stdint.h>
 #include <memory/memory.h>
-#include <stdio.h>
+#include <kstdio.h>
 #include <kernel/panic.h>
 
 /* MACROS */
@@ -43,7 +43,7 @@ void mm_init(uint32_t kernel_end)
 	pheap_desc = (uint8_t*) kmalloc(MAX_PAGE_ALIGNED_ALLOCS);
 
 	/* Done, print and return. */
-	printf("Kernel heap memory setup. Kernel heap start: %h\n", heap_start);
+	kprintf("Kernel heap memory setup. Kernel heap start: %x\n", heap_start);
 }
 
 /* Kernel malloc, page alligned. There is, for the record no way of
@@ -63,11 +63,11 @@ void* kmalloc_p(size_t size, uint32_t* phys)
 /* Used for debung, print kernel heap information. */
 void mm_print()
 {
-	printf("Heap-memory used: %u bytes\n", memory_used);
-	printf("Heap-memory free: %u bytes\n", heap_end - heap_start - memory_used);
-	printf("Heap size %u bytes\n", heap_end - heap_start);
-	printf("Heap start: %h\n", heap_start);
-	printf("Heap end: %h\n", heap_end);
+	kprintf("Heap-memory used: %u bytes\n", memory_used);
+	kprintf("Heap-memory free: %u bytes\n", heap_end - heap_start - memory_used);
+	kprintf("Heap size %u bytes\n", heap_end - heap_start);
+	kprintf("Heap start: %h\n", heap_start);
+	kprintf("Heap end: %h\n", heap_end);
 }
 
 /* Vanilla kmalloc. */
@@ -138,5 +138,3 @@ void kfree(void *mem)
 	memory_used -= alloc->size + sizeof(alloc_t);
 	alloc->status = 0;
 }
-
-

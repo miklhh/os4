@@ -35,8 +35,8 @@ You might need to install *xorriso* to use GRUB, since GRUB is dependant on that
 ## License
 This project is licensed under MIT License - see the [LICENSE.txt](LICENSE.txt) for more details.
 
-Version: 1.3.1 <br />
-Version Date: 2017-06-16
+Version: 1.3.2 <br />
+Version Date: 2017-07-17
 
 [1]:http://wiki.osdev.org/Bare_bones#Frequently_Asked_Questions
 

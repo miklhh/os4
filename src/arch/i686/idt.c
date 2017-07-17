@@ -8,16 +8,17 @@
 #include <kstdio.h>
 #include <kernel/panic.h>
 
-/* Extern functions */
+/* Extern functions. */
 extern void	load_idtr(uint32_t idtd_location);
 extern void	__idt_default_handler();
 extern void	interrupt_test_handler();
 
 
 /* IDT fields. */
-static uint8_t 	idt_initialized = 0;
-static idtd_t idtd;
-static idt_t idt;
+uint8_t         idt_initialized;
+static idtd_t   idtd;
+static idt_t    idt;
+
 
 
 /* Register an interrupt */
@@ -36,6 +37,8 @@ void idt_register_interrupt(uint8_t i, uint32_t callback, uint8_t type_attribute
 void idt_init()
 {
     interrupt_dissable();
+
+    idt_initialized = 0;
 
 	kprintf("IDT location (in memory): %x \n", (uint32_t) &idt);
 	kprintf("IDT-Descriptor location (in memory): %x\n", (uint32_t) &idtd);
@@ -62,14 +65,23 @@ void idt_init()
         "IDT-size = %u, IDT-location = %x, IDTD-locaion = %x\n", 
         idtd.size,
         idtd.location,
-        (uint32_t) &idtd);
-
-        
+        (uint32_t) &idtd);        
 	load_idtr((uint32_t) &idtd);
-	kprintf("IDTR set, preforming test interrupt.\n");
 
+    /* Preform test interrupt. */
+	kprintf("IDTR set, preforming test interrupt.\n");
 	interrupt_enable();
-	idt_initialized = 1;
+    asm volatile("int $0x2f");
+    interrupt_dissable();
+
+    /* The test interrupt will, if it succedded have changed the value of
+     * the idt_initialized variable. */
+    if (idt_initialized != 0xAB)
+    {
+        kprintf("Testhandler magic number: %x\n", 0xAB);
+        kprintf("Testhandler acctual return value: %x\n", idt_initialized);
+        panic("Kernel panic: Interrupt test call failed.");
+    } 
 }
 
 

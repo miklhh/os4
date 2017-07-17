@@ -1,8 +1,10 @@
-#include <kstdio.h>
+/*
+ * Part of OS4, kputchar.c
+ * Author: Mikael Henriksson, miklhh
+ */
 
-#if defined (__is_libk)
+#include <kstdio.h>
 #include <driver/tty.h>
-#endif
 
 
 
