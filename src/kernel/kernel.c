@@ -117,6 +117,7 @@ void kernel_main(void)
         {
             putchar(c);
         }
+        kprintf("Task nr: %u\n", task_get_id());
     // Sleep 20ms.
     asm volatile(
         "movl $2, %%eax     \n"

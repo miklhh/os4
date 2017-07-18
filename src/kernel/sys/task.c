@@ -5,6 +5,7 @@
 
 #include <task/task.h>
 #include <memory/memory.h>
+#include <memory/paging.h>
 #include <stdint.h>
 #include <kstdio.h>
 #include <string.h>
@@ -32,14 +33,15 @@ void task_add(task_t* task)
 /* Function for enabling (multi)tasking. */
 void task_enable()
 {
+    extern uint32_t kernel_page_directory[1024];
     kprintf("Initializing tasking.\n");
 
     /* Allocate the kernel task. */
     kernel_task = kmalloc(sizeof(task_t));
     memset(kernel_task, 0, sizeof(task_t));
-    kernel_task->task_stack = ((uintptr_t) &kernel_task->regs) + sizeof(registers_t);
     current_task = kernel_task;
     current_task->next_task = kernel_task;
+    current_task->page_dir = (uintptr_t) kernel_page_directory;
     last_task = kernel_task;
     task_count = 1;
     
@@ -57,10 +59,15 @@ void task_preempt()
     task_switch(
         &current_task->next_task->task_stack, 
         &current_task->task_stack);
+    load_page_directory((uintptr_t) current_task->page_dir);
 
     /* Cycle (schedule) the current task. */
     last_task->next_task = current_task;
     last_task = current_task;
     current_task = current_task->next_task;
-    //last_task->next_task = NULL;
+}
+
+tid_t task_get_id()
+{
+    return current_task->task_nr;
 }

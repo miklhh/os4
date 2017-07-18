@@ -18,10 +18,9 @@ typedef uint32_t tid_t;
 
 /* Task for the x86 arcitecture (with support for linked lists). */
 typedef struct task {
-    registers_t     regs;           /* Task registers. */
     uintptr_t       task_stack;     /* Task stack. Pointer to bottom of regs. */
     uintptr_t       page_dir;       /* Page directory. */
-    uint32_t        task_nr;        /* Task number. */
+    tid_t           task_nr;        /* Task number. */
     struct task*    next_task;      /* Next task for linked list. */
 } task_t;
 
@@ -37,10 +36,13 @@ typedef struct image {
 } image_t;
 
 
-/* Function declarations. */
-extern void switch_task(task_t* task);
-extern void switch_to_usermode();
+/* Kernel task functions. */ 
+extern void switch_to_usermode(); 
 void task_enable();
 void task_preempt();
+
+/* Task management. */
+tid_t task_get_id();
+tid_t fork();
 
 #endif

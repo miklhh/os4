@@ -4,98 +4,20 @@
 ;
 
 
-; ----------------------------------------------------------------
-;
-; ----- C prototype of registers_t:
-;   typedef struct task {
-;       sp_t        current_sp;
-;       uintptr_t   page_dir;
-;       uint32_t    task_nr;
-;   }
-;
-; For the task switch the registers are pushed to the stack, the stack pointer
-; for the next task is loaded and the registers for the new task are poped of
-; its stack.
-;
-; Note: Registers are pushed to the stack according to the registers_t 
-;       definition (registers_t.h), and the System V ABI specification for
-;       32-bit architecture routines.
-
-
 ; Task switch routine.
 ; C prototype:
 ; -- void task_switch(uintptr_t* new_stack, uintptr_t* old_stack)
+; This routine is to be called by an interrupt routine starting with the 'pusha' 
+; instruction and ending with the 'popa' instruction. 
 global task_switch
 task_switch:
-    pusha                       ; Push all general purpose registers.
-    mov     eax, dword[esp+8]   
-    mov     dword[eax], esp
-    mov     eax, dword[esp+8]
-    mov     esp, dword[eax]
-    ;mov     dword[esp+8], esp   ; Store the old task stack.
-    ;mov     esp, dword[esp+4]   ; Load the task stack.
-    popad                       ; Retrive the new gprs.
+    push    eax                 ; Preserve eax.
+    mov     eax, dword[esp+8]   ; Store the current stack pointer.
+    mov     dword[eax], esp     ; Store the current stack pointer.
+    mov     eax, dword[esp+8]   ; Aquire the new stack pointer.
+    mov     esp, dword[eax]     ; Aquire the new stack pointer.
+    pop     eax                 ; Preserve eax.
     ret                         ; Return.
-
-
-; Store a task to a registers_t structure.
-global task_store_old
-task_store_old:
-    push    eax
-    mov     eax, dword[esp+4]   ; (esp+4) == pointer to registers.
-    mov     dword[eax+28], esp  ; Add the current tasks stackpointer.
-    add     eax, 52             ; Size of the registers_t structure.
-    mov     esp, eax            ; Use the pointer to the registers as stack.
-
-    pushf                       ; Store eflag (not really needed, but hey...).
-    push    edx                 ; Store edx.
-    push    ecx                 ; Store ecx.
-    push    ebx                 ; Store ebx.
-    push    eax                 ; Store eax.
-
-    push    0x00000000          ; We skip adding eip for now, not needed anyway.
-    sub     esp, 4              ; Stackpointer already added.
-    push    ebp                 ; Store ebp.
-    push    esi                 ; Store esi.
-    push    edi                 ; Store edi.
-
-    push    ss                  ; Store segment register.
-    push    gs                  ; Store segment register.
-    push    fs                  ; Store segment register.
-    push    es                  ; Store segment register.
-    push    ds                  ; Store segment register.
-    push    cs                  ; Store cs (not really needed, bu hey...).
-
-    mov     esp, dword[esp-30]  ; Restore the stack a return.
-    pop     eax
-    ret
-
-    
-; Load a task from a registers_t structure.
-global task_load_old
-task_load_old:
-    mov     eax, dword[esp+4]
-    mov     esp, eax
-    
-    add     esp, 4              ; CS register will be loaded by iret instruction.
-    pop     ds                  ; Load segment register.
-    pop     es                  ; Load segment register.
-    pop     fs                  ; Load segment register.
-    pop     gs                  ; Load segment register.
-    pop     ss                  ; Load segment register.
-    
-    pop     edi                 ; Load edi.
-    pop     esi                 ; Load esi.
-    pop     ebp                 ; Load ebp.
-    add     esp, 8              ; Skip poping esp and eip.
-
-    pop     eax                 ; Load eax.
-    pop     ebx                 ; Load ebx.
-    pop     ecx                 ; Load ecx.
-    pop     edx                 ; Load edx.
-    add     esp, 4              ; Skip poping eflags, loaded by iret instruction.
-    mov     esp, dword[esp+28]  ; Load the new stackpointer.
-    ret
 
 
 ; Function used to make a switch to user mode.
@@ -128,5 +50,3 @@ switch_continue:
     pop   	ebp
     ret
 .end:
-
-

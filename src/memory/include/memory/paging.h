@@ -35,5 +35,6 @@ typedef struct page_directory{
 
 /* Functions. */
 void paging_init();
+extern void load_page_directory(uintptr_t page_dir);
 
 #endif

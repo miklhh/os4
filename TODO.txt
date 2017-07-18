@@ -4,7 +4,6 @@
         - Test for stability in current implementation.
         - Clean up old code.
         - Pimp the current code...
-        - Look at 'pit-irq-wrapper', do we really need to 'pusha' and 'popa'?
     - Implement loging system.
     - Complete FAT32 filesystem.
     - Implement a kernel stack smash protector.

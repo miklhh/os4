@@ -4,6 +4,7 @@
  */
 
 #include <memory/memory.h>
+#include <memory/paging.h>
 #include <kstdio.h>
 #include <kernel/panic.h>
 
@@ -30,7 +31,6 @@
 uint32_t kernel_page_directory[1024] __attribute__((aligned(4096)));
 static uint32_t kernel_page_table[1024] __attribute__((aligned(4096)));
 
-extern void load_page_directory(uint32_t* page_dir);
 extern void enable_paging();
 
 void paging_init()
@@ -69,7 +69,7 @@ void paging_init()
 				PAGE_DIR_USER_BIT;
 	
 	/* Enable paging */
-	load_page_directory(kernel_page_directory);
+	load_page_directory((uintptr_t) kernel_page_directory);
 	enable_paging();
 	kprintf("Paging enabled.\n");
 }
