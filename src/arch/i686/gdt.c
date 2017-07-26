@@ -149,7 +149,7 @@ void gdt_init()
 }
 
 /* Set the kernel stack for interrupts. */
-void set_kernel_stack(uint32_t stack)
+void set_kernel_stack(uintptr_t stack)
 {
 	tss_entry.esp0 = stack;
 }

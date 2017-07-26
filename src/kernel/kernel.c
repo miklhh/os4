@@ -110,6 +110,7 @@ void kernel_main(void)
 
 
     // Keyboard.
+    //task_fork();
     while (1)
     {
         char c = keyboard_get_key();

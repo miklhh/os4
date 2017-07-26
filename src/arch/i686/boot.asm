@@ -42,15 +42,25 @@ section .bss
 align 16
 global interrupt_stack_top
 global kernel_stack_top
+global interrupt_stack_bottom
+global kernel_stack_bottom
 
-interrupt_stack_bottom:
-    resb	32768
-interrupt_stack_top:
+
+;interrupt_stack_bottom:     ; Kernel interrupt stack bottom (used in task.c).
+;    resb	32768 
+;interrupt_stack_top:        ; Kernel interrupt stack top (used in task.c).
+;    resb	16
+;kernel_stack_bottom:        ; Kernel stack bottom (used in task.c).
+;    resb 	32768
+;kernel_stack_top:           ; Kernel stack top (used in task.c).
+
+interrupt_stack_bottom:     ; Kernel interrupt stack bottom (used in task.c).
+    resb	8192 
+interrupt_stack_top:        ; Kernel interrupt stack top (used in task.c).
     resb	16
-kernel_stack_bottom:
-    resb 	32768
-kernel_stack_top:
-
+kernel_stack_bottom:        ; Kernel stack bottom (used in task.c).
+    resb 	8192
+kernel_stack_top:           ; Kernel stack top (used in task.c).
 
 ; -- Textsection.
 section .text

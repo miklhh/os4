@@ -32,7 +32,7 @@ void mm_init(uint32_t kernel_end)
 	/* Setup the 'heap' variables */
 	last_alloc 	= kernel_end + 0x1000;
 	heap_start 	= last_alloc;
-	pheap_end 	= 0x400000;
+	pheap_end 	= 0x800000;
 	pheap_start	= pheap_end - (MAX_PAGE_ALIGNED_ALLOCS * 4096);
 	heap_end	= pheap_end;
 	

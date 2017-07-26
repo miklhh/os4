@@ -18,10 +18,19 @@ typedef uint32_t tid_t;
 
 /* Task for the x86 arcitecture (with support for linked lists). */
 typedef struct task {
-    uintptr_t       task_stack;     /* Task stack. Pointer to bottom of regs. */
-    uintptr_t       page_dir;       /* Page directory. */
-    tid_t           task_nr;        /* Task number. */
-    struct task*    next_task;      /* Next task for linked list. */
+    uintptr_t       page_dir;           /* Page directory. */
+    tid_t           task_nr;            /* Task number. */
+    struct task*    next_task;          /* Next task for linked list. */
+
+    uintptr_t       task_stack_begin;   /* Task stack begining. */
+    uintptr_t       task_stack;         /* Task stack. */
+    uintptr_t       task_stack_end;     /* Task stack ending. */
+
+    uintptr_t       kernel_stack;       /* The task kernel stack. */
+
+    /* Note: task_stack_begin denotes the begining of the stack i.e the highest
+     * value in a reversed growing stack. task_stack_end denotes the end of the
+     * stack. */
 } task_t;
 
 
@@ -43,6 +52,6 @@ void task_preempt();
 
 /* Task management. */
 tid_t task_get_id();
-tid_t fork();
+tid_t task_fork();
 
 #endif

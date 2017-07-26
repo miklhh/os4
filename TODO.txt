@@ -1,6 +1,8 @@
 1.  - Work on the tasking.
         - Implement a fork function?
+            - Fix new task numbers.
         - Implement a exec function?
+        - Implement locks for the task adding.
         - Test for stability in current implementation.
         - Clean up old code.
         - Pimp the current code...

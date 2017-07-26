@@ -12,7 +12,7 @@
 global task_switch
 task_switch:
     push    eax                 ; Preserve eax.
-    mov     eax, dword[esp+8]   ; Store the current stack pointer.
+    mov     eax, dword[esp+12]   ; Store the current stack pointer.
     mov     dword[eax], esp     ; Store the current stack pointer.
     mov     eax, dword[esp+8]   ; Aquire the new stack pointer.
     mov     esp, dword[eax]     ; Aquire the new stack pointer.
