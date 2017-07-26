@@ -17,12 +17,12 @@ Minimal hobby operating system written for the x86 architecture.
     2. > *make objfiles*
     3. > *make libs*
     4. > *make os*
-5. To generate a bootable disk image, run the following command in the repository root directory:
+5. To generate a bootable disk image, run the following command from the repository root directory:
     > grub-mkrescue build/sysroot -o os.iso
     
 ### FAQ
 **Q: GRUB doesn't work. I can't create a bootable diskimage.** </br>
-You might need to install *xorriso* to use GRUB, since GRUB is dependant on that piece of software. You can install *xorriso* through most package mangagers.
+You might need to install the software *xorriso* to be able to use GRUB, since GRUB is dependant on that piece of software. You can install *xorriso* through most package mangagers.
 
 **Q: QEMU produces an error message: *'Could not read from CD-ROM (code 0009)'* when i try to emulate the software.** </br>
 > If your development system is booted from EFI it may be that you don't have the PC-BIOS version of the grub binaries installed anywhere. If you install them then grub-mkrescue will by default produce a hybrid ISO that will work in QEMU. On Ubuntu this can be achieved with: apt-get install grub-pc-bin.
